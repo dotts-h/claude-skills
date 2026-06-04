@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>orchestra-skills — a Claude Code skills marketplace</title>
+<meta name="description" content="A Claude Code plugin marketplace distributing 13 reusable methodology skills (ADRs, TDD, contracts, conventions, learnings, tech-debt, QA, design) — available locally and in cloud/web sessions." />
+<style>
+  :root{
+    --bg:#15171a; --panel:#1e2125; --fg:#e7e9ea; --dim:#9aa3ad; --line:#2c3036;
+    --accent:#d98c5f; --accent2:#6ea8fe; --good:#7ee787;
+    --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);
+    font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  a{color:var(--accent2);text-decoration:none}
+  a:hover{text-decoration:underline}
+  header{padding:64px 24px 40px;text-align:center;
+    background:radial-gradient(1200px 400px at 50% -10%, #23272d, var(--bg))}
+  header h1{font-size:2.6rem;margin:0 0 8px;letter-spacing:-.02em}
+  header h1 .glyph{color:var(--accent)}
+  header p{color:var(--dim);max-width:760px;margin:8px auto 0;font-size:1.1rem}
+  .badges{margin-top:20px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .badge{font:12px var(--mono);background:var(--panel);border:1px solid var(--line);
+    border-radius:999px;padding:5px 12px;color:var(--dim)}
+  main{max-width:980px;margin:0 auto;padding:24px}
+  section{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:24px 28px;margin:22px 0}
+  h2{margin-top:0;font-size:1.5rem;letter-spacing:-.01em}
+  h3{color:var(--accent);font-size:1rem;text-transform:uppercase;letter-spacing:.04em;
+    margin:22px 0 10px}
+  pre{background:#0f1113;border:1px solid var(--line);border-radius:10px;
+    padding:16px;overflow:auto;font:13px/1.5 var(--mono);color:var(--fg)}
+  code{font:13px var(--mono);color:var(--good)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+  .card{background:#0f1113;border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .card b{display:block;font:13px var(--mono);color:var(--accent2)}
+  .card span{color:var(--dim);font-size:.9rem}
+  footer{text-align:center;color:var(--dim);padding:32px;font-size:.9rem}
+</style>
+</head>
+<body>
+<header>
+  <h1><span class="glyph">◆</span> orchestra-skills</h1>
+  <p>A Claude Code plugin marketplace — 13 reusable methodology skills, available
+     on your machine and in cloud / web / phone sessions.</p>
+  <div class="badges">
+    <span class="badge">13 skills</span>
+    <span class="badge">1 plugin</span>
+    <span class="badge">Agent Skills standard</span>
+    <span class="badge">cloud-ready</span>
+  </div>
+</header>
+<main>
+  <section>
+    <h2>Install</h2>
+    <p>Add the marketplace to any repo's committed <code>.claude/settings.json</code> —
+       cloud sessions install it automatically at session start:</p>
+    <pre>{
+  "extraKnownMarketplaces": {
+    "orchestra": { "source": { "source": "github", "repo": "dotts-h/claude-skills" } }
+  },
+  "enabledPlugins": ["orchestra-skills@orchestra"]
+}</pre>
+    <p>Or add it interactively in a local session:</p>
+    <pre>/plugin marketplace add dotts-h/claude-skills
+/plugin install orchestra-skills@orchestra</pre>
+  </section>
+
+  <section>
+    <h2>The skills</h2>
+
+    <h3>Docs &amp; knowledge</h3>
+    <div class="grid">
+      <div class="card"><b>recording-decisions</b><span>MADR-lite ADRs under docs/adr/</span></div>
+      <div class="card"><b>registering-contracts</b><span>Interface/route/event/schema registry</span></div>
+      <div class="card"><b>maintaining-conventions</b><span>The project constitution</span></div>
+      <div class="card"><b>logging-learnings</b><span>Fixed bugs, dead-ends, gotchas</span></div>
+      <div class="card"><b>mapping-codebases</b><span>Module map &amp; data-flow</span></div>
+    </div>
+
+    <h3>Process &amp; architecture</h3>
+    <div class="grid">
+      <div class="card"><b>practicing-tdd</b><span>Test-first red→green→refactor</span></div>
+      <div class="card"><b>managing-tech-debt</b><span>Prioritized debt register</span></div>
+      <div class="card"><b>improving-architecture</b><span>Boundaries &amp; coupling, as ADRs</span></div>
+      <div class="card"><b>auditing-code-quality</b><span>Patterns / antipatterns review</span></div>
+    </div>
+
+    <h3>Quality engineering</h3>
+    <div class="grid">
+      <div class="card"><b>hardening-tests</b><span>SDET — coverage, flakes, edge cases</span></div>
+      <div class="card"><b>authoring-tests</b><span>e2e / api / perf / a11y</span></div>
+      <div class="card"><b>exploring-quality</b><span>Two-phase exploratory QA</span></div>
+    </div>
+
+    <h3>Design</h3>
+    <div class="grid">
+      <div class="card"><b>designing-ui-ux</b><span>UX heuristics + UI design tokens</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Why a marketplace</h2>
+    <p>Skills installed only in <code>~/.claude/skills</code> live on one machine and
+       don't travel to Claude Code on the web. A marketplace declared in a repo's
+       <code>.claude/settings.json</code> is installed at the start of every cloud
+       session, so the same skills are available from the terminal, the web, and the
+       phone — and reusable across every repo that declares it.</p>
+  </section>
+</main>
+<footer>
+  orchestra-skills · <a href="https://github.com/dotts-h/claude-skills">github.com/dotts-h/claude-skills</a>
+  · built for <a href="https://github.com/dotts-h/Copilot-sdk">my-orchestra</a>
+</footer>
+</body>
+</html>
