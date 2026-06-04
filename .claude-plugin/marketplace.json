@@ -1,0 +1,14 @@
+{
+  "name": "orchestra",
+  "owner": { "name": "dotts-h" },
+  "metadata": {
+    "description": "Methodology skills extracted from the my-orchestra project: ADRs, TDD, contracts, conventions, learnings, tech-debt, architecture, code-quality, and QA."
+  },
+  "plugins": [
+    {
+      "name": "orchestra-skills",
+      "source": "./plugins/orchestra-skills",
+      "description": "13 reusable methodology skills (docs, process, QA, design)."
+    }
+  ]
+}

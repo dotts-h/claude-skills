@@ -1,0 +1,6 @@
+{
+  "name": "orchestra-skills",
+  "version": "0.1.0",
+  "description": "Methodology skills for software projects: recording-decisions (ADRs), practicing-tdd, registering-contracts, maintaining-conventions, logging-learnings, managing-tech-debt, mapping-codebases, improving-architecture, auditing-code-quality, hardening-tests, authoring-tests, exploring-quality, designing-ui-ux.",
+  "author": { "name": "dotts-h" }
+}
