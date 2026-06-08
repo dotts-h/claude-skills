@@ -1,5 +1,7 @@
 # orchestra — Claude Code skills marketplace
 
+**[Documentation →](https://dotts-h.github.io/claude-skills/)**
+
 A plugin marketplace distributing the methodology skills built for the *my-orchestra*
 project, so they're available everywhere — including Claude Code on the web/phone
 (cloud sessions install declared plugins at session start).
