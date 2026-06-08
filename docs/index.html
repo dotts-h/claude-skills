@@ -3,116 +3,1068 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>orchestra-skills — a Claude Code skills marketplace</title>
-<meta name="description" content="A Claude Code plugin marketplace distributing 13 reusable methodology skills (ADRs, TDD, contracts, conventions, learnings, tech-debt, QA, design) — available locally and in cloud/web sessions." />
+<title>orchestra-skills — Claude Code skills documentation</title>
+<meta name="description" content="Documentation for orchestra-skills: 13 reusable methodology skills for Claude Code covering ADRs, TDD, contracts, conventions, tech-debt, architecture, QA, and design." />
 <style>
-  :root{
-    --bg:#15171a; --panel:#1e2125; --fg:#e7e9ea; --dim:#9aa3ad; --line:#2c3036;
-    --accent:#d98c5f; --accent2:#6ea8fe; --good:#7ee787;
-    --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  :root {
+    --bg: #15171a;
+    --panel: #1e2125;
+    --panel2: #0f1113;
+    --fg: #e7e9ea;
+    --dim: #9aa3ad;
+    --line: #2c3036;
+    --accent: #d98c5f;
+    --accent2: #6ea8fe;
+    --good: #7ee787;
+    --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    --sidebar-w: 228px;
   }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);
-    font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-  a{color:var(--accent2);text-decoration:none}
-  a:hover{text-decoration:underline}
-  header{padding:64px 24px 40px;text-align:center;
-    background:radial-gradient(1200px 400px at 50% -10%, #23272d, var(--bg))}
-  header h1{font-size:2.6rem;margin:0 0 8px;letter-spacing:-.02em}
-  header h1 .glyph{color:var(--accent)}
-  header p{color:var(--dim);max-width:760px;margin:8px auto 0;font-size:1.1rem}
-  .badges{margin-top:20px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-  .badge{font:12px var(--mono);background:var(--panel);border:1px solid var(--line);
-    border-radius:999px;padding:5px 12px;color:var(--dim)}
-  main{max-width:980px;margin:0 auto;padding:24px}
-  section{background:var(--panel);border:1px solid var(--line);border-radius:14px;
-    padding:24px 28px;margin:22px 0}
-  h2{margin-top:0;font-size:1.5rem;letter-spacing:-.01em}
-  h3{color:var(--accent);font-size:1rem;text-transform:uppercase;letter-spacing:.04em;
-    margin:22px 0 10px}
-  pre{background:#0f1113;border:1px solid var(--line);border-radius:10px;
-    padding:16px;overflow:auto;font:13px/1.5 var(--mono);color:var(--fg)}
-  code{font:13px var(--mono);color:var(--good)}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-  .card{background:#0f1113;border:1px solid var(--line);border-radius:10px;padding:14px 16px}
-  .card b{display:block;font:13px var(--mono);color:var(--accent2)}
-  .card span{color:var(--dim);font-size:.9rem}
-  footer{text-align:center;color:var(--dim);padding:32px;font-size:.9rem}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font: 15px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  a { color: var(--accent2); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ── Header ─────────────────────────────── */
+  header {
+    padding: 64px 24px 48px;
+    text-align: center;
+    background: radial-gradient(1400px 500px at 50% -10%, #23272d, var(--bg));
+    border-bottom: 1px solid var(--line);
+  }
+  header h1 { font-size: 2.8rem; letter-spacing: -.03em; margin-bottom: 10px; }
+  header h1 .glyph { color: var(--accent); }
+  .tagline { color: var(--dim); font-size: 1.05rem; max-width: 680px; margin: 0 auto 22px; }
+  .badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .badge {
+    font: 12px var(--mono);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 13px;
+    color: var(--dim);
+  }
+
+  /* ── Page layout ─────────────────────────── */
+  .page-layout {
+    display: grid;
+    grid-template-columns: var(--sidebar-w) 1fr;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+    gap: 48px;
+    align-items: start;
+  }
+
+  /* ── Sidebar ─────────────────────────────── */
+  .sidebar {
+    position: sticky;
+    top: 24px;
+    padding: 28px 0;
+    align-self: start;
+  }
+  .sidebar nav h4 {
+    color: var(--dim);
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    margin: 20px 0 6px;
+    padding: 0 10px;
+  }
+  .sidebar nav h4:first-child { margin-top: 0; }
+  .sidebar nav a {
+    display: block;
+    padding: 4px 10px;
+    color: var(--dim);
+    border-radius: 6px;
+    border-left: 2px solid transparent;
+    font-size: .9rem;
+    transition: color .15s, border-color .15s, background .15s;
+  }
+  .sidebar nav a:hover {
+    color: var(--fg);
+    text-decoration: none;
+    border-left-color: var(--accent);
+    background: rgba(255,255,255,.03);
+  }
+  .sidebar nav a.skill-link {
+    font: 12px/1.9 var(--mono);
+    padding: 2px 10px;
+  }
+  .sidebar nav a.skill-link:hover { color: var(--accent2); }
+
+  /* ── Main content ────────────────────────── */
+  .content { padding: 32px 0 80px; }
+  .content section { margin-bottom: 60px; }
+  .content h2 {
+    font-size: 1.65rem;
+    letter-spacing: -.02em;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .content h3 {
+    font-size: .82rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin: 32px 0 12px;
+  }
+  .content p { color: var(--dim); margin-bottom: 12px; line-height: 1.7; }
+  .content p:last-child { margin-bottom: 0; }
+  .content strong { color: var(--fg); }
+
+  /* ── Code ────────────────────────────────── */
+  pre {
+    background: var(--panel2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    overflow-x: auto;
+    font: 13px/1.6 var(--mono);
+    color: var(--fg);
+    margin: 12px 0;
+  }
+  code { font: 13px var(--mono); color: var(--good); }
+  pre code { color: inherit; font-size: inherit; }
+  .dim { color: var(--dim); }
+  .hl { color: var(--accent2); }
+  .acc { color: var(--accent); }
+
+  /* ── Anatomy boxes ───────────────────────── */
+  .anatomy {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .anatomy-item {
+    background: var(--panel2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .anatomy-item .file {
+    font: 600 13px var(--mono);
+    color: var(--accent2);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .anatomy-item .desc { color: var(--dim); font-size: .88rem; line-height: 1.5; }
+
+  /* ── Distribution chain ──────────────────── */
+  .chain {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0;
+    margin: 20px 0;
+    font-size: .875rem;
+  }
+  .chain-node {
+    background: var(--panel2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 9px 14px;
+    text-align: center;
+    line-height: 1.3;
+  }
+  .chain-node small { display: block; color: var(--dim); font-size: .75rem; margin-top: 2px; }
+  .chain-arrow { color: var(--dim); padding: 0 10px; font-size: 1rem; }
+
+  /* ── Install ─────────────────────────────── */
+  .install-option { margin-bottom: 28px; }
+  .install-option > h3 { margin-top: 0; }
+
+  /* ── Callout ─────────────────────────────── */
+  .callout {
+    background: var(--panel);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 14px 0;
+    color: var(--dim);
+    font-size: .9rem;
+    line-height: 1.6;
+  }
+
+  /* ── Skills ──────────────────────────────── */
+  details.skill {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  details.skill summary {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 14px 18px;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+  details.skill summary::-webkit-details-marker { display: none; }
+  details.skill summary::before {
+    content: "▶";
+    font-size: 9px;
+    color: var(--dim);
+    flex-shrink: 0;
+    transition: transform .2s;
+    margin-top: 2px;
+  }
+  details.skill[open] summary::before { transform: rotate(90deg); }
+  details.skill summary .skill-name {
+    font: 600 14px var(--mono);
+    color: var(--accent2);
+    flex-shrink: 0;
+    min-width: 210px;
+  }
+  details.skill summary .skill-oneliner { color: var(--dim); font-size: .9rem; }
+
+  .skill-body {
+    padding: 0 18px 20px;
+    border-top: 1px solid var(--line);
+  }
+  .skill-body > p { margin-top: 14px; }
+  .skill-body h4 {
+    font-size: .77rem;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--accent);
+    margin: 20px 0 8px;
+  }
+  .skill-body ol, .skill-body ul { color: var(--dim); padding-left: 20px; }
+  .skill-body li { margin-bottom: 5px; line-height: 1.6; }
+
+  .invoke-block {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 14px 0;
+    padding: 10px 14px;
+    background: var(--panel2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  .invoke-label { font-size: .78rem; color: var(--dim); white-space: nowrap; text-transform: uppercase; letter-spacing: .05em; }
+  .invoke-cmd { font: 13px var(--mono); color: var(--accent2); }
+
+  /* ── Tables ──────────────────────────────── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .875rem;
+    margin-top: 4px;
+  }
+  .data-table th {
+    text-align: left;
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--dim);
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--line);
+    font-weight: 600;
+  }
+  .data-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table td:first-child { font: 12px var(--mono); color: var(--good); white-space: nowrap; padding-right: 16px; }
+  .data-table td:last-child { color: var(--dim); }
+
+  /* ── Principles ──────────────────────────── */
+  .principles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .principle-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .principle-card .title { color: var(--fg); font-weight: 600; font-size: .95rem; margin-bottom: 6px; }
+  .principle-card .body { color: var(--dim); font-size: .875rem; line-height: 1.55; }
+
+  /* ── Footer ──────────────────────────────── */
+  footer {
+    text-align: center;
+    color: var(--dim);
+    padding: 32px;
+    font-size: .875rem;
+    border-top: 1px solid var(--line);
+  }
+
+  /* ── Responsive ──────────────────────────── */
+  @media (max-width: 920px) {
+    .page-layout { grid-template-columns: 1fr; gap: 0; padding: 0 20px; }
+    .sidebar { display: none; }
+    header h1 { font-size: 2.1rem; }
+    details.skill summary .skill-name { min-width: 0; }
+  }
+  @media (max-width: 600px) {
+    header { padding: 40px 16px 32px; }
+    .page-layout { padding: 0 16px; }
+    details.skill summary { flex-wrap: wrap; gap: 6px; }
+    .chain { flex-direction: column; align-items: flex-start; }
+    .chain-arrow { transform: rotate(90deg); padding: 4px 14px; }
+    .anatomy { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
+
 <header>
   <h1><span class="glyph">◆</span> orchestra-skills</h1>
-  <p>A Claude Code plugin marketplace — 13 reusable methodology skills, available
-     on your machine and in cloud / web / phone sessions.</p>
+  <p class="tagline">13 reusable methodology skills for Claude Code — distributed as a marketplace plugin, available from your terminal, web app, and mobile.</p>
   <div class="badges">
     <span class="badge">13 skills</span>
-    <span class="badge">1 plugin</span>
-    <span class="badge">Agent Skills standard</span>
+    <span class="badge">1 plugin · v0.1.0</span>
     <span class="badge">cloud-ready</span>
+    <span class="badge">Agent Skills standard</span>
   </div>
 </header>
-<main>
-  <section>
-    <h2>Install</h2>
-    <p>Add the marketplace to any repo's committed <code>.claude/settings.json</code> —
-       cloud sessions install it automatically at session start:</p>
-    <pre>{
+
+<div class="page-layout">
+
+  <!-- ── Sidebar ─────────────────────────── -->
+  <aside class="sidebar">
+    <nav>
+      <h4>Documentation</h4>
+      <a href="#overview">Overview</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#install">Installation</a>
+      <a href="#skills">Skills</a>
+      <a href="#principles">Principles</a>
+
+      <h4>Docs &amp; Knowledge</h4>
+      <a href="#recording-decisions" class="skill-link">recording-decisions</a>
+      <a href="#registering-contracts" class="skill-link">registering-contracts</a>
+      <a href="#maintaining-conventions" class="skill-link">maintaining-conventions</a>
+      <a href="#logging-learnings" class="skill-link">logging-learnings</a>
+      <a href="#mapping-codebases" class="skill-link">mapping-codebases</a>
+
+      <h4>Process &amp; Architecture</h4>
+      <a href="#practicing-tdd" class="skill-link">practicing-tdd</a>
+      <a href="#managing-tech-debt" class="skill-link">managing-tech-debt</a>
+      <a href="#improving-architecture" class="skill-link">improving-architecture</a>
+      <a href="#auditing-code-quality" class="skill-link">auditing-code-quality</a>
+
+      <h4>Quality Engineering</h4>
+      <a href="#hardening-tests" class="skill-link">hardening-tests</a>
+      <a href="#authoring-tests" class="skill-link">authoring-tests</a>
+      <a href="#exploring-quality" class="skill-link">exploring-quality</a>
+
+      <h4>Design</h4>
+      <a href="#designing-ui-ux" class="skill-link">designing-ui-ux</a>
+    </nav>
+  </aside>
+
+  <!-- ── Main content ───────────────────── -->
+  <main class="content">
+
+    <!-- OVERVIEW -->
+    <section id="overview">
+      <h2>Overview</h2>
+      <p>
+        <strong>orchestra-skills</strong> is a Claude Code plugin that delivers 13 methodology skills —
+        structured workflows covering Architecture Decision Records, TDD, contract registries, tech-debt management,
+        codebase mapping, architecture auditing, multi-layer QA, and UI/UX design. Each skill ships with a
+        step-by-step workflow, shell helper scripts, and reference guides.
+      </p>
+      <p>
+        Skills are distributed as a <strong>marketplace plugin</strong>: declare the marketplace once in a repo's
+        committed <code>.claude/settings.json</code> and every session — local terminal, web app, or mobile —
+        installs the same skills automatically.
+      </p>
+      <div class="chain">
+        <div class="chain-node">marketplace.json<small>dotts-h/claude-skills</small></div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-node">orchestra-skills<small>plugin · v0.1.0</small></div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-node">13 skills<small>SKILL.md + scripts + refs</small></div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-node">any session<small>terminal · web · mobile</small></div>
+      </div>
+    </section>
+
+    <!-- ARCHITECTURE -->
+    <section id="architecture">
+      <h2>Architecture</h2>
+
+      <h3>Repository layout</h3>
+<pre><span class="dim">dotts-h/claude-skills/</span>
+├── <span class="hl">.claude-plugin/</span>
+│   └── marketplace.json          <span class="dim"># marketplace catalog — registers the plugin</span>
+├── <span class="hl">plugins/orchestra-skills/</span>
+│   ├── .claude-plugin/
+│   │   └── plugin.json           <span class="dim"># plugin manifest (name, version, author)</span>
+│   └── skills/
+│       ├── <span class="acc">recording-decisions/</span>  <span class="dim"># one directory per skill</span>
+│       │   ├── SKILL.md          <span class="dim"># frontmatter + description + workflow + rules</span>
+│       │   ├── references/       <span class="dim"># pattern guides and templates (1–5 files)</span>
+│       │   └── scripts/          <span class="dim"># bash helpers (1–4 scripts)</span>
+│       └── … (13 skills total)
+├── <span class="hl">docs/</span>
+│   ├── index.html                <span class="dim"># this page (served via GitHub Pages)</span>
+│   └── .nojekyll
+└── README.md</pre>
+
+      <h3>Skill anatomy</h3>
+      <p>Every skill follows the same three-part structure:</p>
+      <div class="anatomy">
+        <div class="anatomy-item">
+          <span class="file">SKILL.md</span>
+          <span class="desc">YAML frontmatter (name, description, allowed-tools) followed by the full workflow: ordered steps, trigger conditions, rules, and inline pointers to reference material.</span>
+        </div>
+        <div class="anatomy-item">
+          <span class="file">references/</span>
+          <span class="desc">Markdown guides, templates, and pattern libraries the skill cites — typically 1–5 files. These are the knowledge library Claude reads before acting.</span>
+        </div>
+        <div class="anatomy-item">
+          <span class="file">scripts/</span>
+          <span class="desc">Bash helpers the skill runs: allocating numbers, mining signals, running quality gates, computing metrics. Deterministic and idempotent where possible.</span>
+        </div>
+      </div>
+
+      <h3>SKILL.md frontmatter</h3>
+<pre>---
+name: recording-decisions
+description: >
+  Propose, number, and manage Architecture Decision Records (ADRs)
+  using the MADR-lite format under docs/adr/.
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob
+---
+
+## Workflow
+…</pre>
+
+      <h3>Marketplace distribution</h3>
+      <p>
+        The <code>.claude-plugin/marketplace.json</code> file registers the repo as a named marketplace
+        (<code>orchestra</code>). The <code>plugin.json</code> manifest inside the plugin declares
+        what skills it provides. Cloud sessions read a repo's committed <code>.claude/settings.json</code>
+        and install declared plugins automatically at session start — no local setup needed for web or mobile.
+      </p>
+      <div class="callout">
+        Skills in <code>~/.claude/skills</code> live only on one machine. A marketplace declared in
+        <code>.claude/settings.json</code> travels with the repo: commit it once and every collaborator's
+        cloud session gets the same skills.
+      </div>
+    </section>
+
+    <!-- INSTALLATION -->
+    <section id="install">
+      <h2>Installation</h2>
+
+      <div class="install-option">
+        <h3>Via settings.json — persists across all sessions</h3>
+        <p>Add to the repo's committed <code>.claude/settings.json</code>:</p>
+<pre>{
   "extraKnownMarketplaces": {
-    "orchestra": { "source": { "source": "github", "repo": "dotts-h/claude-skills" } }
+    "orchestra": {
+      "source": { "source": "github", "repo": "dotts-h/claude-skills" }
+    }
   },
   "enabledPlugins": ["orchestra-skills@orchestra"]
 }</pre>
-    <p>Or add it interactively in a local session:</p>
-    <pre>/plugin marketplace add dotts-h/claude-skills
+        <p>Commit and push. Any cloud session for that repo installs the plugin automatically at session start.</p>
+      </div>
+
+      <div class="install-option">
+        <h3>Interactively in a local session</h3>
+<pre>/plugin marketplace add dotts-h/claude-skills
 /plugin install orchestra-skills@orchestra</pre>
-  </section>
+      </div>
 
-  <section>
-    <h2>The skills</h2>
+      <div class="install-option">
+        <h3>Invoking a skill</h3>
+        <p>Once installed, invoke any skill by typing its name as a slash command:</p>
+<pre>/recording-decisions
+/practicing-tdd
+/exploring-quality</pre>
+        <p>Each skill reads <code>docs/CONVENTIONS.md</code> first (if it exists in your repo), then runs its workflow.</p>
+      </div>
+    </section>
 
-    <h3>Docs &amp; knowledge</h3>
-    <div class="grid">
-      <div class="card"><b>recording-decisions</b><span>MADR-lite ADRs under docs/adr/</span></div>
-      <div class="card"><b>registering-contracts</b><span>Interface/route/event/schema registry</span></div>
-      <div class="card"><b>maintaining-conventions</b><span>The project constitution</span></div>
-      <div class="card"><b>logging-learnings</b><span>Fixed bugs, dead-ends, gotchas</span></div>
-      <div class="card"><b>mapping-codebases</b><span>Module map &amp; data-flow</span></div>
-    </div>
+    <!-- SKILLS -->
+    <section id="skills">
+      <h2>Skills</h2>
+      <p>13 skills across 4 groups. Expand any skill to see its full description, workflow, scripts, and reference files.</p>
 
-    <h3>Process &amp; architecture</h3>
-    <div class="grid">
-      <div class="card"><b>practicing-tdd</b><span>Test-first red→green→refactor</span></div>
-      <div class="card"><b>managing-tech-debt</b><span>Prioritized debt register</span></div>
-      <div class="card"><b>improving-architecture</b><span>Boundaries &amp; coupling, as ADRs</span></div>
-      <div class="card"><b>auditing-code-quality</b><span>Patterns / antipatterns review</span></div>
-    </div>
+      <!-- ── Docs & Knowledge ────────────── -->
+      <h3>Docs &amp; Knowledge</h3>
 
-    <h3>Quality engineering</h3>
-    <div class="grid">
-      <div class="card"><b>hardening-tests</b><span>SDET — coverage, flakes, edge cases</span></div>
-      <div class="card"><b>authoring-tests</b><span>e2e / api / perf / a11y</span></div>
-      <div class="card"><b>exploring-quality</b><span>Two-phase exploratory QA</span></div>
-    </div>
+      <details class="skill" id="recording-decisions">
+        <summary>
+          <span class="skill-name">recording-decisions</span>
+          <span class="skill-oneliner">MADR-lite Architecture Decision Records under docs/adr/</span>
+        </summary>
+        <div class="skill-body">
+          <p>Propose, number, and manage Architecture Decision Records (ADRs) using the MADR-lite format. ADRs capture the <em>why</em> behind significant decisions — framework choices, patterns, naming conventions, persistence strategies. Once accepted, an ADR is immutable; decisions are recorded as a new ADR that supersedes the old one, never as an edit.</p>
+          <div class="invoke-block">
+            <span class="invoke-label">Invoke when</span>
+            <span class="invoke-cmd">you make a significant architectural or design decision worth preserving</span>
+          </div>
+          <h4>Workflow</h4>
+          <ol>
+            <li>Read <code>docs/CONVENTIONS.md</code> for any project-specific ADR rules</li>
+            <li>Run <code>new-adr.sh</code> to allocate the next sequential number and create a stub file</li>
+            <li>Write the ADR body: context, decision, consequences, and alternatives considered</li>
+            <li>Mark status as <em>Accepted</em></li>
+            <li>Run <code>relink.sh</code> if any supersedes/superseded-by links need updating</li>
+          </ol>
+          <h4>Scripts</h4>
+          <table class="data-table">
+            <thead><tr><th>Script</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>new-adr.sh</td><td>Allocate the next ADR number and create a stub at docs/adr/NNNN-kebab-title.md</td></tr>
+              <tr><td>reindex.sh</td><td>Renumber all ADR files sequentially after deletions or re-ordering</td></tr>
+              <tr><td>relink.sh</td><td>Fix supersedes / superseded-by cross-links across all ADR files</td></tr>
+            </tbody>
+          </table>
+          <h4>Reference files</h4>
+          <table class="data-table">
+            <thead><tr><th>File</th><th>Content</th></tr></thead>
+            <tbody>
+              <tr><td>madr-template.md</td><td>MADR-lite frontmatter + body template (status, deciders, date, context, decision, consequences)</td></tr>
+              <tr><td>styles.md</td><td>Comparison of MADR vs Nygard ADR styles — when to use each</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
 
-    <h3>Design</h3>
-    <div class="grid">
-      <div class="card"><b>designing-ui-ux</b><span>UX heuristics + UI design tokens</span></div>
-    </div>
-  </section>
+      <details class="skill" id="registering-contracts">
+        <summary>
+          <span class="skill-name">registering-contracts</span>
+          <span class="skill-oneliner">Interface, route, event &amp; schema registry in docs/CONTRACTS.md</span>
+        </summary>
+        <div class="skill-body">
+          <p>Maintain <code>docs/CONTRACTS.md</code> — the single registry of all stable promises between components. Covers Go interfaces, HTTP routes, SSE event types, config schemas, and invariants. Every entry carries a stability marker: <strong>stable</strong>, <strong>internal</strong>, or <strong>experimental</strong>. Breaking a stable contract requires an ADR before the change is made.</p>
+          <div class="invoke-block">
+            <span class="invoke-label">Invoke when</span>
+            <span class="invoke-cmd">adding or changing a public interface, route, event type, or schema</span>
+          </div>
+          <h4>Workflow</h4>
+          <ol>
+            <li>Classify the contract type (interface / route / event / schema / invariant)</li>
+            <li>Run <code>extract-interfaces.sh</code> to cross-check all exported Go interfaces against the registry</li>
+            <li>Add or update the row in CONTRACTS.md with the correct stability marker</li>
+            <li>For stable → breaking changes: write an ADR first, then update the contract entry</li>
+          </ol>
+          <h4>Scripts</h4>
+          <table class="data-table">
+            <thead><tr><th>Script</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>extract-interfaces.sh</td><td>Grep exported interfaces from Go source to verify registry coverage</td></tr>
+              <tr><td>ensure-doc.sh</td><td>Create CONTRACTS.md with the standard stub if it doesn't exist</td></tr>
+            </tbody>
+          </table>
+          <h4>Reference files</h4>
+          <table class="data-table">
+            <thead><tr><th>File</th><th>Content</th></tr></thead>
+            <tbody>
+              <tr><td>contract-entry-template.md</td><td>Column definitions and example rows for each contract type</td></tr>
+              <tr><td>detecting-drift.md</td><td>How to spot contract drift at code-review time; checklist of drift signals</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
 
-  <section>
-    <h2>Why a marketplace</h2>
-    <p>Skills installed only in <code>~/.claude/skills</code> live on one machine and
-       don't travel to Claude Code on the web. A marketplace declared in a repo's
-       <code>.claude/settings.json</code> is installed at the start of every cloud
-       session, so the same skills are available from the terminal, the web, and the
-       phone — and reusable across every repo that declares it.</p>
-  </section>
-</main>
+      <details class="skill" id="maintaining-conventions">
+        <summary>
+          <span class="skill-name">maintaining-conventions</span>
+          <span class="skill-oneliner">The project constitution — docs/CONVENTIONS.md</span>
+        </summary>
+        <div class="skill-body">
+          <p>Curate <code>docs/CONVENTIONS.md</code> — the central rulebook that every other methodology skill reads before acting. Contains copy-pasteable commands, exact file paths, coverage floors, merge strategy, naming rules, and environment facts. Rules are not paraphrased; they are copy-pasteable and machine-checkable. Every enforceable rule links back to its ADR.</p>
+          <div class="invoke-block">
+            <span class="invoke-label">Invoke when</span>
+            <span class="invoke-cmd">adding a workflow rule, updating a quality gate, or codifying a repeated pattern</span>
+          </div>
+          <h4>Workflow</h4>
+          <ol>
+            <li>Run <code>harvest.sh</code> to mine existing TODOs, patterns, and config for convention candidates</li>
+            <li>Propose the convention in the correct section (see <code>convention-categories.md</code> for the required section set)</li>
+            <li>Add an ADR backlink if the convention is enforceable</li>
+            <li>Run <code>check.sh</code> to validate all required sections are present</li>
+          </ol>
+          <h4>Scripts</h4>
+          <table class="data-table">
+            <thead><tr><th>Script</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>harvest.sh</td><td>Mine TODOs, FIXMEs, config keys, and naming patterns to surface convention candidates</td></tr>
+              <tr><td>check.sh</td><td>Validate CONVENTIONS.md has all required sections and no broken ADR links</td></tr>
+            </tbody>
+          </table>
+          <h4>Reference files</h4>
+          <table class="data-table">
+            <thead><tr><th>File</th><th>Content</th></tr></thead>
+            <tbody>
+              <tr><td>convention-categories.md</td><td>Required sections and their content contracts: workflow, architecture, testing, quality gates, persistence, environment, naming/style</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <details class="skill" id="logging-learnings">
+        <summary>
+          <span class="skill-name">logging-learnings</span>
+          <span class="skill-oneliner">Fixed bugs, dead-ends &amp; gotchas in docs/REGRESSIONS.md</span>
+        </summary>
+        <div class="skill-body">
+          <p>Log fixed bugs and dead-ends to <code>docs/REGRESSIONS.md</code> (or <code>LEARNINGS.md</code>) so the same mistake can't be repeated silently. Three entry types: <strong>Fixed</strong> (symptom / root-cause / fix / guard-test), <strong>Dead-end</strong> (tried / why-failed / instead), and <strong>Gotcha</strong> (unexpected behavior or constraint). Every fixed bug must name the guarding test that prevents recurrence.</p>
+          <div class="invoke-block">
+            <span class="invoke-label">Invoke when</span>
+            <span class="invoke-cmd">after fixing a bug, hitting a dead-end, or discovering an unexpected gotcha</span>
+          </div>
+          <h4>Workflow</h4>
+          <ol>
+            <li>Run <code>ensure-doc.sh</code> to create the stub if REGRESSIONS.md doesn't exist</li>
+            <li>Classify the entry type (Fixed / Dead-end / Gotcha)</li>
+            <li>For bug fixes: name the guarding test — this is mandatory</li>
+            <li>Write the entry from the appropriate template and append to the document</li>
+          </ol>
+          <h4>Scripts</h4>
+          <table class="data-table">
+            <thead><tr><th>Script</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>ensure-doc.sh</td><td>Create REGRESSIONS.md with standard stub and section headers if the file is missing</td></tr>
+            </tbody>
+          </table>
+          <h4>Reference files</h4>
+          <table class="data-table">
+            <thead><tr><th>File</th><th>Content</th></tr></thead>
+            <tbody>
+              <tr><td>entry-templates.md</td><td>Complete templates for Fixed, Dead-end, and Gotcha entry types</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <details class="skill" id="mapping-codebases">
+        <summary>
+          <span class="skill-name">mapping-codebases</span>
+          <span class="skill-oneliner">Module layout &amp; data-flow map in docs/CODEBASE_MAP.md</span>
+        </summary>
+        <div class="skill-body">
+          <p>Generate <code>docs/CODEBASE_MAP.md</code> — a module table, primary data path (as an arrow chain), and seam identification. The map is an index, not an encyclopedia: it answers "where does X live and how does data move?" then points to <code>ARCHITECTURE.md</code> and <code>CONTRACTS.md</code> for depth. Distinguishes pure-core modules from thin-edge adapters.</p>
+          <div class="invoke-block">
+            <span class="invoke-label">Invoke when</span>
+            <span class="invoke-cmd">onboarding, before a cross-cutting refactor, or when "where does X live?" keeps coming up</span>
+          </div>
+          <h4>Workflow</h4>
+          <ol>
+            <li>Run <code>module-inventory.sh</code> to get LOC and exported symbol count per package</li>
+            <li>Write the module table: path, purpose, LOC, exports, pure-core or thin-edge</li>
+            <li>Trace the primary data path from entry point to output as an arrow chain</li>
+            <li>Identify the main seams — interfaces where mocks exist or should exist</li>
+          </ol>
+          <h4>Scripts</h4>
+          <table class="data-table">
+            <thead><tr><th>Script</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>module-inventory.sh</td><td>Compute LOC and exported symbol count per Go package / module</td></tr>
+            </tbody>
+          </table>
+          <h4>Reference files</h4>
+          <table class="data-table">
+            <thead><tr><th>File</th><th>Content</th></tr></thead>
+            <tbody>
+              <tr><td>map-template.md</td><td>Full CODEBASE_MAP.md template with all required sections and example rows</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <!-- ── Process & Architecture ─────── -->
+      <h3>Process &amp; Architecture</h3>
+
+      <details class="skill" id="practicing-tdd">
+        <summary>
+          <span class="skill-name">practicing-tdd</span>
+          <span class="skill-oneliner">Test-first red → green → refactor cycle</span>
+        </summary>
+        <div class="skill-body">
+          <p>Drive development test-first: write a failing test that defines the requirement, write the minimum code to make it pass, refactor under green, then run all quality gates. Tests are written through the seam (the <code>copilot.Client</code> mock interface) — never against internals. Table-driven tests are the default.</p>
+          <div class="invoke-block">
+            <span class="invoke-label">Invoke when</span>
+            <span class="invoke-cmd">starting any feature or bug fix</span>
+          </div>
+          <h4>Workflow</h4>
+          <ol>
+            <li>Write the failing test first — assert on events/state, not on internal function calls</li>
+            <li>Confirm it's red before writing any product code (never skip this)</li>
+            <li>Write the minimum code to make it green</li>
+            <li>Confirm green</li>
+            <li>Refactor with confidence — tests stay green throughout</li>
+            <li>Run <code>gate.sh</code> to execute all project lint, test, and coverage gates</li>
+          </ol>
+          <h4>Scripts</h4>
+          <table class="data-table">
+            <thead><tr><th>Script</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>gate.sh</td><td>Auto-detect and run all project quality gates (lint, test, coverage floor) in one command</td></tr>
+            </tbody>
+          </table>
+          <h4>Reference files</h4>
+          <table class="data-table">
+            <thead><tr><th>File</th><th>Content</th></tr></thead>
+            <tbody>
+              <tr><td>testing-through-the-seam.md</td><td>Seam-based unit testing: MockClient pattern, what to assert on, what to avoid</td></tr>
+              <tr><td>red-green-refactor.md</td><td>Table-driven test structure, discipline rules, and common TDD mistakes</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <details class="skill" id="managing-tech-debt">
+        <summary>
+          <span class="skill-name">managing-tech-debt</span>
+          <span class="skill-oneliner">Prioritized debt register in docs/TECH_DEBT.md</span>
+        </summary>
+        <div class="skill-body">
+          <p>Record shortcuts, legacy knots, and architecture drift in <code>docs/TECH_DEBT.md</code>. Each row captures description, location, severity, effort, and — most critically — <em>interest</em> (ongoing drag × probability of triggering). Rank by interest, not severity: a medium-severity item that slows every PR has higher priority than a severe item you'll never touch.</p>
+          <div class="invoke-block">
+            <span class="invoke-label">Invoke when</span>
+            <span class="invoke-cmd">taking a shortcut, discovering untracked debt, or reviewing before a release</span>
+          </div>
+          <h4>Workflow</h4>
+          <ol>
+            <li>Run <code>debt-scan.sh</code> to sweep for TODO/FIXME/HACK with file and line context</li>
+            <li>Classify each item (architecture / testing / docs / tooling / performance)</li>
+            <li>Score severity, effort, and interest (ongoing drag × likelihood)</li>
+            <li>Add rows to TECH_DEBT.md; set a paydown trigger condition for each item</li>
+          </ol>
+          <h4>Scripts</h4>
+          <table class="data-table">
+            <thead><tr><th>Script</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>debt-scan.sh</td><td>Grep for TODO/FIXME/HACK across the codebase with file and line context</td></tr>
+              <tr><td>ensure-doc.sh</td><td>Create TECH_DEBT.md with the standard stub if missing</td></tr>
+            </tbody>
+          </table>
+          <h4>Reference files</h4>
+          <table class="data-table">
+            <thead><tr><th>File</th><th>Content</th></tr></thead>
+            <tbody>
+              <tr><td>debt-register-template.md</td><td>Table column definitions, scoring rubric, and example rows</td></tr>
+              <tr><td>prioritization.md</td><td>Interest = probability × ongoing drag; how to score and rank the register</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <details class="skill" id="improving-architecture">
+        <summary>
+          <span class="skill-name">improving-architecture</span>
+          <span class="skill-oneliner">Structural assessment &amp; refactoring — always via ADRs</span>
+        </summary>
+        <div class="skill-body">
+          <p>Assess module boundaries, dependency direction, and coupling. All structural changes are proposed as ADRs — never refactored silently. Checks <em>structure</em>: layer violations, forbidden imports, hidden coupling. Distinct from bug-finding (<code>/code-review</code>) and line-level cleanup (<code>/simplify</code>).</p>
+          <div class="invoke-block">
+            <span class="invoke-label">Invoke when</span>
+            <span class="invoke-cmd">coupling concerns surface, before a large refactor, or after mapping the codebase</span>
+          </div>
+          <h4>Workflow</h4>
+          <ol>
+            <li>Run <code>deps-check.sh</code> for a per-package import summary and forbidden cross-layer imports</li>
+            <li>Identify coupling smells using the <code>coupling-smells.md</code> symptom table</li>
+            <li>Check dependency direction against the allowed rules in <code>dependency-rules.md</code></li>
+            <li>Propose the structural change as an ADR using the <code>refactor-as-adr.md</code> template</li>
+            <li>Implement under the ADR — the decision record is the paper trail</li>
+          </ol>
+          <h4>Scripts</h4>
+          <table class="data-table">
+            <thead><tr><th>Script</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>deps-check.sh</td><td>Per-package import summary; flags imports that violate layer dependency rules</td></tr>
+            </tbody>
+          </table>
+          <h4>Reference files</h4>
+          <table class="data-table">
+            <thead><tr><th>File</th><th>Content</th></tr></thead>
+            <tbody>
+              <tr><td>coupling-smells.md</td><td>Symptom → root cause table for common coupling problems</td></tr>
+              <tr><td>dependency-rules.md</td><td>Allowed import directions by architectural layer</td></tr>
+              <tr><td>refactor-as-adr.md</td><td>Template for recording structural changes as Architecture Decision Records</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <details class="skill" id="auditing-code-quality">
+        <summary>
+          <span class="skill-name">auditing-code-quality</span>
+          <span class="skill-oneliner">Patterns &amp; antipatterns review against project idioms</span>
+        </summary>
+        <div class="skill-body">
+          <p>Review code against Go idioms, the project's pure-core/thin-edges architecture, seam discipline, error handling patterns, and naming conventions. Produces a ranked findings report with file and line references. Distinct from bug-finding (<code>/code-review</code>) and mechanical formatting cleanup (<code>/simplify</code>).</p>
+          <div class="invoke-block">
+            <span class="invoke-label">Invoke when</span>
+            <span class="invoke-cmd">pre-merge quality gate, periodic code health check, or onboarding audit</span>
+          </div>
+          <h4>Key antipatterns (ranked by cost)</h4>
+          <ol>
+            <li><strong>Seam leak</strong> — production type used directly in tests instead of the interface</li>
+            <li><strong>Punted error</strong> — error swallowed, logged-and-continued, or returned as nil</li>
+            <li><strong>Impure core</strong> — telemetry/config/ctxforge package importing business logic</li>
+            <li><strong>Voodoo constants</strong> — magic numbers or strings with no named constant</li>
+            <li><strong>Inconsistent terminology</strong> — same concept named differently across packages</li>
+            <li><strong>Nondeterminism</strong> — map iteration, goroutine ordering, or time.Now() in pure functions</li>
+            <li><strong>Premature abstraction</strong> — interface with one implementation and no test doubles</li>
+          </ol>
+          <h4>Scripts</h4>
+          <table class="data-table">
+            <thead><tr><th>Script</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>smells.sh</td><td>Detect seam leaks, punted errors, and naming drift via grep patterns</td></tr>
+            </tbody>
+          </table>
+          <h4>Reference files</h4>
+          <table class="data-table">
+            <thead><tr><th>File</th><th>Content</th></tr></thead>
+            <tbody>
+              <tr><td>antipatterns-catalog.md</td><td>Ranked catalog with symptoms, root causes, and recommended fixes</td></tr>
+              <tr><td>go-patterns.md</td><td>Idiomatic Go patterns the project follows</td></tr>
+              <tr><td>project-idioms.md</td><td>Project-specific naming conventions and style rules</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <!-- ── Quality Engineering ─────────── -->
+      <h3>Quality Engineering</h3>
+
+      <details class="skill" id="hardening-tests">
+        <summary>
+          <span class="skill-name">hardening-tests</span>
+          <span class="skill-oneliner">SDET audit — coverage gaps, weak assertions, flakes</span>
+        </summary>
+        <div class="skill-body">
+          <p>Audit the test suite as an SDET: identify coverage gaps, assess assertion strength, hunt flaky tests, and detect missing edge/property/fuzz cases. Doesn't write product code — only strengthens tests. Key insight: a line <em>ran</em> is not a line <em>checked</em>; mutation testing is the real coverage bar.</p>
+          <div class="invoke-block">
+            <span class="invoke-label">Invoke when</span>
+            <span class="invoke-cmd">pre-release hardening, after a regression, or when mutation scores are low</span>
+          </div>
+          <h4>Workflow</h4>
+          <ol>
+            <li>Scan for coverage gaps: uncovered code paths and missing error branches</li>
+            <li>Assess assertion strength — are tests checking behavior or just "no panic"?</li>
+            <li>Run <code>flake-hunt.sh</code> to detect non-deterministic failures under the -race flag</li>
+            <li>Run <code>mutation-run.sh</code> to identify surviving mutants (undertested logic)</li>
+            <li>Write guard tests for any fixed bugs that are missing coverage</li>
+          </ol>
+          <h4>Scripts</h4>
+          <table class="data-table">
+            <thead><tr><th>Script</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>flake-hunt.sh</td><td>Run tests N times with -race; collect and report non-deterministic failures</td></tr>
+              <tr><td>mutation-run.sh</td><td>Run mutation testing; report surviving mutants as undertested logic</td></tr>
+            </tbody>
+          </table>
+          <h4>Reference files</h4>
+          <table class="data-table">
+            <thead><tr><th>File</th><th>Content</th></tr></thead>
+            <tbody>
+              <tr><td>assertion-strength.md</td><td>Weak vs. strong assertion patterns; how to upgrade from "no panic" to behavioral checks</td></tr>
+              <tr><td>flake-hunting.md</td><td>Isolation strategies, common root causes, and fixes for flaky tests</td></tr>
+              <tr><td>mutation-testing.md</td><td>Reading mutation results, typical survivors, and how to kill them</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <details class="skill" id="authoring-tests">
+        <summary>
+          <span class="skill-name">authoring-tests</span>
+          <span class="skill-oneliner">e2e · API · performance · accessibility test layers</span>
+        </summary>
+        <div class="skill-body">
+          <p>Write higher-level tests across four layers: Playwright end-to-end (real browser, htmx, SSE), API/contract (escaping, cookies, isolation), performance benchmarks (hot paths, latency), and accessibility (WCAG 2.1/2.2). Locator discipline is enforced: role/test-id selectors and web-first assertions only. The demo server is a shared in-memory session — see <code>demo-gotchas.md</code> for isolation pitfalls.</p>
+          <div class="invoke-block">
+            <span class="invoke-label">Invoke when</span>
+            <span class="invoke-cmd">a feature is complete and needs e2e, API contract, performance, or a11y coverage</span>
+          </div>
+          <h4>Test layers</h4>
+          <table class="data-table">
+            <thead><tr><th>Layer</th><th>Scope</th></tr></thead>
+            <tbody>
+              <tr><td>e2e</td><td>Real browser, full user flows, htmx DOM updates, SSE message delivery</td></tr>
+              <tr><td>api / contract</td><td>HTTP responses, escaping, cookie handling, cross-endpoint isolation</td></tr>
+              <tr><td>perf</td><td>Benchmark hot paths, latency under load, memory allocation</td></tr>
+              <tr><td>a11y</td><td>WCAG 2.1/2.2: role attributes, keyboard navigation, focus order, contrast ratios</td></tr>
+            </tbody>
+          </table>
+          <h4>Scripts</h4>
+          <table class="data-table">
+            <thead><tr><th>Script</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>init-agents.sh</td><td>Scaffold Playwright agent test files for the target layer</td></tr>
+              <tr><td>run-layer.sh</td><td>Run a specific test layer: e2e | api | perf | a11y</td></tr>
+            </tbody>
+          </table>
+          <h4>Reference files</h4>
+          <table class="data-table">
+            <thead><tr><th>File</th><th>Content</th></tr></thead>
+            <tbody>
+              <tr><td>test-layers.md</td><td>Full taxonomy of test layers: what each covers and when to use each</td></tr>
+              <tr><td>playwright-agents.md</td><td>Locator discipline, web-first assertions, and the Playwright agents workflow</td></tr>
+              <tr><td>demo-gotchas.md</td><td>Shared in-memory demo session pitfalls and test isolation strategies</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <details class="skill" id="exploring-quality">
+        <summary>
+          <span class="skill-name">exploring-quality</span>
+          <span class="skill-oneliner">Two-phase exploratory QA → ranked findings report</span>
+        </summary>
+        <div class="skill-body">
+          <p>Two-phase exploratory QA: <strong>Phase 1</strong> is breadth — derive the full surface from code, probe all routes headlessly, cheaply. <strong>Phase 2</strong> is depth — real browser, curiosity-led investigation using accessibility-tree snapshots to chase anomalies found in Phase 1. Output is a ranked findings report saved to <code>docs/qa/exploratory-&lt;date&gt;.md</code>.</p>
+          <div class="invoke-block">
+            <span class="invoke-label">Invoke when</span>
+            <span class="invoke-cmd">pre-release QA pass, after a major feature, or when automated tests can't answer "is this actually good?"</span>
+          </div>
+          <h4>Workflow</h4>
+          <ol>
+            <li><strong>Phase 1 (breadth):</strong> run <code>surface-inventory.sh</code> to extract all routes → run <code>breadth-sweep.sh</code> to probe them headlessly → collect anomalies</li>
+            <li><strong>Phase 2 (depth):</strong> run <code>launch-demo.sh</code> → open a real browser → investigate top anomalies from Phase 1 with Playwright accessibility-tree snapshots</li>
+            <li>Compile ranked findings into <code>docs/qa/exploratory-&lt;date&gt;.md</code> using the findings-report template</li>
+          </ol>
+          <h4>Scripts</h4>
+          <table class="data-table">
+            <thead><tr><th>Script</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>surface-inventory.sh</td><td>Extract all routes and endpoints from source code</td></tr>
+              <tr><td>launch-demo.sh</td><td>Start the demo server for manual or Playwright-driven testing</td></tr>
+              <tr><td>breadth-sweep.sh</td><td>Scripted headless probe of all surfaces found by surface-inventory.sh</td></tr>
+            </tbody>
+          </table>
+          <h4>Reference files</h4>
+          <table class="data-table">
+            <thead><tr><th>File</th><th>Content</th></tr></thead>
+            <tbody>
+              <tr><td>phase1-breadth.md</td><td>Headless sweep methodology: what to check and how to record anomalies</td></tr>
+              <tr><td>phase2-deepdive.md</td><td>Real-browser curiosity-led investigation: accessibility-tree technique and chase heuristics</td></tr>
+              <tr><td>findings-report.md</td><td>Ranked findings report template (severity / impact / reproduction / recommendation)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <!-- ── Design ─────────────────────── -->
+      <h3>Design</h3>
+
+      <details class="skill" id="designing-ui-ux">
+        <summary>
+          <span class="skill-name">designing-ui-ux</span>
+          <span class="skill-oneliner">UX heuristics · a11y audit · design tokens · htmx patterns</span>
+        </summary>
+        <div class="skill-body">
+          <p>Full UX/UI design loop: audit UX flows against Nielsen's 10 heuristics and Krug's principles, audit accessibility (WCAG POUR), review visual hierarchy (Refactoring-UI), update design tokens in <code>docs/DESIGN.md</code>, implement, and verify with automated scans. Design tokens as CSS custom properties prevent visual drift. Accessibility wins are locked with automated tests.</p>
+          <div class="invoke-block">
+            <span class="invoke-label">Invoke when</span>
+            <span class="invoke-cmd">designing new UI, auditing existing UX, addressing a11y issues, or updating design tokens</span>
+          </div>
+          <h4>Workflow</h4>
+          <ol>
+            <li>Audit UX flows against Nielsen/Krug heuristics</li>
+            <li>Audit accessibility (WCAG POUR: Perceivable, Operable, Understandable, Robust)</li>
+            <li>Audit visual hierarchy against Refactoring-UI spacing and typography principles</li>
+            <li>Update design token definitions in <code>docs/DESIGN.md</code> (CSS custom properties)</li>
+            <li>Implement changes</li>
+            <li>Run <code>axe-scan.sh</code> to verify a11y compliance; run <code>screenshot-states.sh</code> to capture visual state</li>
+          </ol>
+          <h4>Scripts</h4>
+          <table class="data-table">
+            <thead><tr><th>Script</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>axe-scan.sh</td><td>Run the axe accessibility scanner against the running demo and report violations</td></tr>
+              <tr><td>screenshot-states.sh</td><td>Capture key UI states for visual comparison and regression detection</td></tr>
+            </tbody>
+          </table>
+          <h4>Reference files</h4>
+          <table class="data-table">
+            <thead><tr><th>File</th><th>Content</th></tr></thead>
+            <tbody>
+              <tr><td>ux-heuristics.md</td><td>Nielsen's 10 usability heuristics + Krug's "Don't Make Me Think" principles applied to web UX</td></tr>
+              <tr><td>wcag-pour.md</td><td>WCAG 2.1/2.2 Perceivable/Operable/Understandable/Robust checklist</td></tr>
+              <tr><td>refactoring-ui.md</td><td>Visual hierarchy, spacing, typography, and color contrast principles</td></tr>
+              <tr><td>design-tokens.md</td><td>CSS custom property token schema — how to define, document, and use tokens</td></tr>
+              <tr><td>htmx-implementation.md</td><td>htmx-specific UX patterns: partial updates, loading states, error feedback</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+    </section>
+
+    <!-- PRINCIPLES -->
+    <section id="principles">
+      <h2>Core Principles</h2>
+      <p>Shared disciplines enforced across all 13 skills:</p>
+      <div class="principles-grid">
+        <div class="principle-card">
+          <div class="title">Documentation as code</div>
+          <div class="body">Every enforceable rule links an ADR (the <em>why</em>). Docs are the source of truth, not copies of code comments.</div>
+        </div>
+        <div class="principle-card">
+          <div class="title">Immutable decisions</div>
+          <div class="body">ADRs are never edited once accepted. A changed decision becomes a new ADR that supersedes the old one.</div>
+        </div>
+        <div class="principle-card">
+          <div class="title">Deterministic tooling</div>
+          <div class="body">Scripts compute numbers (ADR allocation, module inventory, debt scores) rather than relying on memory or approximation.</div>
+        </div>
+        <div class="principle-card">
+          <div class="title">Seam discipline</div>
+          <div class="body">A defined interface separates testable business logic from network adapters. Tests mock the seam, never the implementation.</div>
+        </div>
+        <div class="principle-card">
+          <div class="title">Pure core, thin edges</div>
+          <div class="body">Core packages (telemetry, config, ctxforge) stay dependency-free. All I/O lives in thin adapter packages at the edges.</div>
+        </div>
+        <div class="principle-card">
+          <div class="title">Contracts as registry</div>
+          <div class="body">All stable promises (interfaces, routes, events, schemas) live in one table. Breaking a stable contract requires an ADR first.</div>
+        </div>
+        <div class="principle-card">
+          <div class="title">Interest over severity</div>
+          <div class="body">Tech debt is ranked by interest (ongoing drag × probability), not by severity alone. High-friction items that slow every PR outrank rare catastrophic ones.</div>
+        </div>
+        <div class="principle-card">
+          <div class="title">Two-phase QA</div>
+          <div class="body">Breadth first (cheap, headless, full surface), then depth (real browser, curiosity-led, chasing anomalies). Don't go deep before going wide.</div>
+        </div>
+        <div class="principle-card">
+          <div class="title">Constitution pattern</div>
+          <div class="body"><code>docs/CONVENTIONS.md</code> is the single rulebook. Every skill reads it before acting. Rules are copy-pasteable, not paraphrased.</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
 <footer>
-  orchestra-skills · <a href="https://github.com/dotts-h/claude-skills">github.com/dotts-h/claude-skills</a>
-  · built for <a href="https://github.com/dotts-h/Copilot-sdk">my-orchestra</a>
+  orchestra-skills v0.1.0 ·
+  <a href="https://github.com/dotts-h/claude-skills">github.com/dotts-h/claude-skills</a> ·
+  built for <a href="https://github.com/dotts-h/Copilot-sdk">my-orchestra</a>
 </footer>
+
 </body>
 </html>
