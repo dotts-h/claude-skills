@@ -307,20 +307,88 @@
     border-top: 1px solid var(--line);
   }
 
+  /* ── Tables: scroll horizontally on small screens ── */
+  .data-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* ── Mobile TOC (hidden on desktop) ─────────────── */
+  .mobile-toc { display: none; }
+
   /* ── Responsive ──────────────────────────── */
   @media (max-width: 920px) {
+    body { overflow-x: hidden; }
     .page-layout { grid-template-columns: 1fr; gap: 0; padding: 0 20px; }
     .sidebar { display: none; }
     header h1 { font-size: 2.1rem; }
     details.skill summary .skill-name { min-width: 0; }
+
+    .mobile-toc {
+      display: block;
+      margin: 0 20px 8px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .mobile-toc > summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 16px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: .95rem;
+      list-style: none;
+      user-select: none;
+      min-height: 44px;
+    }
+    .mobile-toc > summary::-webkit-details-marker { display: none; }
+    .mobile-toc > summary::after { content: "↓"; color: var(--dim); font-weight: 400; }
+    .mobile-toc[open] > summary::after { content: "↑"; }
+    .mobile-toc .toc-body {
+      border-top: 1px solid var(--line);
+      padding: 8px 0 12px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    }
+    .mobile-toc .toc-group { padding: 10px 16px 4px; }
+    .mobile-toc .toc-group h4 {
+      font-size: .68rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--dim);
+      margin-bottom: 4px;
+    }
+    .mobile-toc .toc-group a {
+      display: block;
+      padding: 4px 0;
+      color: var(--dim);
+      font-size: .875rem;
+      min-height: 32px;
+      line-height: 32px;
+    }
+    .mobile-toc .toc-group a.skill-link {
+      font: 12px/2.4 var(--mono);
+      min-height: 28px;
+    }
+    .mobile-toc .toc-group a:hover { color: var(--accent2); text-decoration: none; }
   }
   @media (max-width: 600px) {
     header { padding: 40px 16px 32px; }
     .page-layout { padding: 0 16px; }
+    .mobile-toc { margin: 0 16px 8px; }
     details.skill summary { flex-wrap: wrap; gap: 6px; }
+    details.skill summary { padding: 12px 14px; min-height: 48px; }
     .chain { flex-direction: column; align-items: flex-start; }
     .chain-arrow { transform: rotate(90deg); padding: 4px 14px; }
     .anatomy { grid-template-columns: 1fr; }
+    .invoke-block { flex-wrap: wrap; row-gap: 4px; }
+    .principles-grid { grid-template-columns: 1fr; }
+    .content h2 { font-size: 1.4rem; }
+    pre { font-size: 12px; padding: 12px 14px; }
+    .mobile-toc .toc-body { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 380px) {
+    .mobile-toc .toc-body { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -336,6 +404,46 @@
     <span class="badge">Agent Skills standard</span>
   </div>
 </header>
+
+<!-- Mobile contents menu — hidden on desktop, shown below 920px -->
+<details class="mobile-toc">
+  <summary>Contents</summary>
+  <div class="toc-body">
+    <div class="toc-group">
+      <h4>Sections</h4>
+      <a href="#overview">Overview</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#install">Installation</a>
+      <a href="#skills">Skills</a>
+      <a href="#principles">Principles</a>
+    </div>
+    <div class="toc-group">
+      <h4>Docs &amp; Knowledge</h4>
+      <a href="#recording-decisions" class="skill-link">recording-decisions</a>
+      <a href="#registering-contracts" class="skill-link">registering-contracts</a>
+      <a href="#maintaining-conventions" class="skill-link">maintaining-conventions</a>
+      <a href="#logging-learnings" class="skill-link">logging-learnings</a>
+      <a href="#mapping-codebases" class="skill-link">mapping-codebases</a>
+    </div>
+    <div class="toc-group">
+      <h4>Process &amp; Architecture</h4>
+      <a href="#practicing-tdd" class="skill-link">practicing-tdd</a>
+      <a href="#managing-tech-debt" class="skill-link">managing-tech-debt</a>
+      <a href="#improving-architecture" class="skill-link">improving-architecture</a>
+      <a href="#auditing-code-quality" class="skill-link">auditing-code-quality</a>
+    </div>
+    <div class="toc-group">
+      <h4>Quality Engineering</h4>
+      <a href="#hardening-tests" class="skill-link">hardening-tests</a>
+      <a href="#authoring-tests" class="skill-link">authoring-tests</a>
+      <a href="#exploring-quality" class="skill-link">exploring-quality</a>
+    </div>
+    <div class="toc-group">
+      <h4>Design</h4>
+      <a href="#designing-ui-ux" class="skill-link">designing-ui-ux</a>
+    </div>
+  </div>
+</details>
 
 <div class="page-layout">
 
