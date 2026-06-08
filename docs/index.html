@@ -20,7 +20,7 @@
     --sidebar-w: 228px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
   body {
     background: var(--bg);
     color: var(--fg);
@@ -29,7 +29,7 @@
   a { color: var(--accent2); text-decoration: none; }
   a:hover { text-decoration: underline; }
 
-  /* ── Header ─────────────────────────────── */
+  /* ── Header ───────────────────────────────────── */
   header {
     padding: 64px 24px 48px;
     text-align: center;
@@ -49,7 +49,7 @@
     color: var(--dim);
   }
 
-  /* ── Page layout ─────────────────────────── */
+  /* ── Page layout ─────────────────────────────────── */
   .page-layout {
     display: grid;
     grid-template-columns: var(--sidebar-w) 1fr;
@@ -60,7 +60,7 @@
     align-items: start;
   }
 
-  /* ── Sidebar ─────────────────────────────── */
+  /* ── Sidebar ───────────────────────────────────── */
   .sidebar {
     position: sticky;
     top: 24px;
@@ -97,8 +97,8 @@
   }
   .sidebar nav a.skill-link:hover { color: var(--accent2); }
 
-  /* ── Main content ────────────────────────── */
-  .content { padding: 32px 0 80px; }
+  /* ── Main content ────────────────────────────────── */
+  .content { padding: 32px 0 80px; min-width: 0; }
   .content section { margin-bottom: 60px; }
   .content h2 {
     font-size: 1.65rem;
@@ -118,16 +118,19 @@
   .content p:last-child { margin-bottom: 0; }
   .content strong { color: var(--fg); }
 
-  /* ── Code ────────────────────────────────── */
+  /* ── Code ────────────────────────────────────────── */
   pre {
     background: var(--panel2);
     border: 1px solid var(--line);
     border-radius: 10px;
     padding: 16px 18px;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     font: 13px/1.6 var(--mono);
     color: var(--fg);
     margin: 12px 0;
+    max-width: 100%;
+    width: 100%;
   }
   code { font: 13px var(--mono); color: var(--good); }
   pre code { color: inherit; font-size: inherit; }
@@ -135,7 +138,7 @@
   .hl { color: var(--accent2); }
   .acc { color: var(--accent); }
 
-  /* ── Anatomy boxes ───────────────────────── */
+  /* ── Anatomy boxes ────────────────────────────────── */
   .anatomy {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -156,7 +159,7 @@
   }
   .anatomy-item .desc { color: var(--dim); font-size: .88rem; line-height: 1.5; }
 
-  /* ── Distribution chain ──────────────────── */
+  /* ── Distribution chain ────────────────────────────── */
   .chain {
     display: flex;
     align-items: center;
@@ -176,11 +179,11 @@
   .chain-node small { display: block; color: var(--dim); font-size: .75rem; margin-top: 2px; }
   .chain-arrow { color: var(--dim); padding: 0 10px; font-size: 1rem; }
 
-  /* ── Install ─────────────────────────────── */
+  /* ── Install ───────────────────────────────────────── */
   .install-option { margin-bottom: 28px; }
   .install-option > h3 { margin-top: 0; }
 
-  /* ── Callout ─────────────────────────────── */
+  /* ── Callout ──────────────────────────────────────── */
   .callout {
     background: var(--panel);
     border-left: 3px solid var(--accent);
@@ -192,7 +195,7 @@
     line-height: 1.6;
   }
 
-  /* ── Skills ──────────────────────────────── */
+  /* ── Skills ──────────────────────────────────────────── */
   details.skill {
     background: var(--panel);
     border: 1px solid var(--line);
@@ -255,7 +258,7 @@
   .invoke-label { font-size: .78rem; color: var(--dim); white-space: nowrap; text-transform: uppercase; letter-spacing: .05em; }
   .invoke-cmd { font: 13px var(--mono); color: var(--accent2); }
 
-  /* ── Tables ──────────────────────────────── */
+  /* ── Tables ────────────────────────────────────────── */
   .data-table {
     width: 100%;
     border-collapse: collapse;
@@ -282,7 +285,7 @@
   .data-table td:first-child { font: 12px var(--mono); color: var(--good); white-space: nowrap; padding-right: 16px; }
   .data-table td:last-child { color: var(--dim); }
 
-  /* ── Principles ──────────────────────────── */
+  /* ── Principles ──────────────────────────────────────── */
   .principles-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -298,7 +301,7 @@
   .principle-card .title { color: var(--fg); font-weight: 600; font-size: .95rem; margin-bottom: 6px; }
   .principle-card .body { color: var(--dim); font-size: .875rem; line-height: 1.55; }
 
-  /* ── Footer ──────────────────────────────── */
+  /* ── Footer ──────────────────────────────────────────── */
   footer {
     text-align: center;
     color: var(--dim);
@@ -310,12 +313,11 @@
   /* ── Tables: scroll horizontally on small screens ── */
   .data-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
-  /* ── Mobile TOC (hidden on desktop) ─────────────── */
+  /* ── Mobile TOC (hidden on desktop) ──────────────────── */
   .mobile-toc { display: none; }
 
-  /* ── Responsive ──────────────────────────── */
+  /* ── Responsive ──────────────────────────────────── */
   @media (max-width: 920px) {
-    body { overflow-x: hidden; }
     .page-layout { grid-template-columns: 1fr; gap: 0; padding: 0 20px; }
     .sidebar { display: none; }
     header h1 { font-size: 2.1rem; }
@@ -447,7 +449,7 @@
 
 <div class="page-layout">
 
-  <!-- ── Sidebar ─────────────────────────── -->
+  <!-- ── Sidebar ───────────────────────────────────── -->
   <aside class="sidebar">
     <nav>
       <h4>Documentation</h4>
@@ -480,7 +482,7 @@
     </nav>
   </aside>
 
-  <!-- ── Main content ───────────────────── -->
+  <!-- ── Main content ─────────────────────────────────── -->
   <main class="content">
 
     <!-- OVERVIEW -->
@@ -493,7 +495,7 @@
         step-by-step workflow, shell helper scripts, and reference guides.
       </p>
       <p>
-        Skills are distributed as a <strong>marketplace plugin</strong>: declare the marketplace once in a repo's
+        Skills are distributed as a <strong>marketplace plugin</strong>: declare the marketplace once in a repo’s
         committed <code>.claude/settings.json</code> and every session — local terminal, web app, or mobile —
         installs the same skills automatically.
       </p>
@@ -515,18 +517,18 @@
       <h3>Repository layout</h3>
 <pre><span class="dim">dotts-h/claude-skills/</span>
 ├── <span class="hl">.claude-plugin/</span>
-│   └── marketplace.json          <span class="dim"># marketplace catalog — registers the plugin</span>
+│   └── marketplace.json    <span class="dim"># catalog — registers the plugin</span>
 ├── <span class="hl">plugins/orchestra-skills/</span>
 │   ├── .claude-plugin/
-│   │   └── plugin.json           <span class="dim"># plugin manifest (name, version, author)</span>
+│   │   └── plugin.json     <span class="dim"># manifest (name, version, author)</span>
 │   └── skills/
-│       ├── <span class="acc">recording-decisions/</span>  <span class="dim"># one directory per skill</span>
-│       │   ├── SKILL.md          <span class="dim"># frontmatter + description + workflow + rules</span>
-│       │   ├── references/       <span class="dim"># pattern guides and templates (1–5 files)</span>
-│       │   └── scripts/          <span class="dim"># bash helpers (1–4 scripts)</span>
+│       ├── <span class="acc">recording-decisions/</span>
+│       │   ├── SKILL.md    <span class="dim"># frontmatter + workflow + rules</span>
+│       │   ├── references/ <span class="dim"># guides &amp; templates (1–5 files)</span>
+│       │   └── scripts/    <span class="dim"># bash helpers (1–4 scripts)</span>
 │       └── … (13 skills total)
 ├── <span class="hl">docs/</span>
-│   ├── index.html                <span class="dim"># this page (served via GitHub Pages)</span>
+│   ├── index.html          <span class="dim"># GitHub Pages site</span>
 │   └── .nojekyll
 └── README.md</pre>
 
@@ -563,12 +565,12 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
       <p>
         The <code>.claude-plugin/marketplace.json</code> file registers the repo as a named marketplace
         (<code>orchestra</code>). The <code>plugin.json</code> manifest inside the plugin declares
-        what skills it provides. Cloud sessions read a repo's committed <code>.claude/settings.json</code>
+        what skills it provides. Cloud sessions read a repo’s committed <code>.claude/settings.json</code>
         and install declared plugins automatically at session start — no local setup needed for web or mobile.
       </p>
       <div class="callout">
         Skills in <code>~/.claude/skills</code> live only on one machine. A marketplace declared in
-        <code>.claude/settings.json</code> travels with the repo: commit it once and every collaborator's
+        <code>.claude/settings.json</code> travels with the repo: commit it once and every collaborator’s
         cloud session gets the same skills.
       </div>
     </section>
@@ -579,7 +581,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 
       <div class="install-option">
         <h3>Via settings.json — persists across all sessions</h3>
-        <p>Add to the repo's committed <code>.claude/settings.json</code>:</p>
+        <p>Add to the repo’s committed <code>.claude/settings.json</code>:</p>
 <pre>{
   "extraKnownMarketplaces": {
     "orchestra": {
@@ -612,7 +614,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
       <h2>Skills</h2>
       <p>13 skills across 4 groups. Expand any skill to see its full description, workflow, scripts, and reference files.</p>
 
-      <!-- ── Docs & Knowledge ────────────── -->
+      <!-- ── Docs & Knowledge ──────────────────── -->
       <h3>Docs &amp; Knowledge</h3>
 
       <details class="skill" id="recording-decisions">
@@ -677,7 +679,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
             <thead><tr><th>Script</th><th>Purpose</th></tr></thead>
             <tbody>
               <tr><td>extract-interfaces.sh</td><td>Grep exported interfaces from Go source to verify registry coverage</td></tr>
-              <tr><td>ensure-doc.sh</td><td>Create CONTRACTS.md with the standard stub if it doesn't exist</td></tr>
+              <tr><td>ensure-doc.sh</td><td>Create CONTRACTS.md with the standard stub if it doesn’t exist</td></tr>
             </tbody>
           </table>
           <h4>Reference files</h4>
@@ -733,14 +735,14 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
           <span class="skill-oneliner">Fixed bugs, dead-ends &amp; gotchas in docs/REGRESSIONS.md</span>
         </summary>
         <div class="skill-body">
-          <p>Log fixed bugs and dead-ends to <code>docs/REGRESSIONS.md</code> (or <code>LEARNINGS.md</code>) so the same mistake can't be repeated silently. Three entry types: <strong>Fixed</strong> (symptom / root-cause / fix / guard-test), <strong>Dead-end</strong> (tried / why-failed / instead), and <strong>Gotcha</strong> (unexpected behavior or constraint). Every fixed bug must name the guarding test that prevents recurrence.</p>
+          <p>Log fixed bugs and dead-ends to <code>docs/REGRESSIONS.md</code> (or <code>LEARNINGS.md</code>) so the same mistake can’t be repeated silently. Three entry types: <strong>Fixed</strong> (symptom / root-cause / fix / guard-test), <strong>Dead-end</strong> (tried / why-failed / instead), and <strong>Gotcha</strong> (unexpected behavior or constraint). Every fixed bug must name the guarding test that prevents recurrence.</p>
           <div class="invoke-block">
             <span class="invoke-label">Invoke when</span>
             <span class="invoke-cmd">after fixing a bug, hitting a dead-end, or discovering an unexpected gotcha</span>
           </div>
           <h4>Workflow</h4>
           <ol>
-            <li>Run <code>ensure-doc.sh</code> to create the stub if REGRESSIONS.md doesn't exist</li>
+            <li>Run <code>ensure-doc.sh</code> to create the stub if REGRESSIONS.md doesn’t exist</li>
             <li>Classify the entry type (Fixed / Dead-end / Gotcha)</li>
             <li>For bug fixes: name the guarding test — this is mandatory</li>
             <li>Write the entry from the appropriate template and append to the document</li>
@@ -768,10 +770,10 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
           <span class="skill-oneliner">Module layout &amp; data-flow map in docs/CODEBASE_MAP.md</span>
         </summary>
         <div class="skill-body">
-          <p>Generate <code>docs/CODEBASE_MAP.md</code> — a module table, primary data path (as an arrow chain), and seam identification. The map is an index, not an encyclopedia: it answers "where does X live and how does data move?" then points to <code>ARCHITECTURE.md</code> and <code>CONTRACTS.md</code> for depth. Distinguishes pure-core modules from thin-edge adapters.</p>
+          <p>Generate <code>docs/CODEBASE_MAP.md</code> — a module table, primary data path (as an arrow chain), and seam identification. The map is an index, not an encyclopedia: it answers “where does X live and how does data move?” then points to <code>ARCHITECTURE.md</code> and <code>CONTRACTS.md</code> for depth. Distinguishes pure-core modules from thin-edge adapters.</p>
           <div class="invoke-block">
             <span class="invoke-label">Invoke when</span>
-            <span class="invoke-cmd">onboarding, before a cross-cutting refactor, or when "where does X live?" keeps coming up</span>
+            <span class="invoke-cmd">onboarding, before a cross-cutting refactor, or when “where does X live?” keeps coming up</span>
           </div>
           <h4>Workflow</h4>
           <ol>
@@ -797,7 +799,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
         </div>
       </details>
 
-      <!-- ── Process & Architecture ─────── -->
+      <!-- ── Process & Architecture ───────────────── -->
       <h3>Process &amp; Architecture</h3>
 
       <details class="skill" id="practicing-tdd">
@@ -814,7 +816,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
           <h4>Workflow</h4>
           <ol>
             <li>Write the failing test first — assert on events/state, not on internal function calls</li>
-            <li>Confirm it's red before writing any product code (never skip this)</li>
+            <li>Confirm it’s red before writing any product code (never skip this)</li>
             <li>Write the minimum code to make it green</li>
             <li>Confirm green</li>
             <li>Refactor with confidence — tests stay green throughout</li>
@@ -844,7 +846,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
           <span class="skill-oneliner">Prioritized debt register in docs/TECH_DEBT.md</span>
         </summary>
         <div class="skill-body">
-          <p>Record shortcuts, legacy knots, and architecture drift in <code>docs/TECH_DEBT.md</code>. Each row captures description, location, severity, effort, and — most critically — <em>interest</em> (ongoing drag × probability of triggering). Rank by interest, not severity: a medium-severity item that slows every PR has higher priority than a severe item you'll never touch.</p>
+          <p>Record shortcuts, legacy knots, and architecture drift in <code>docs/TECH_DEBT.md</code>. Each row captures description, location, severity, effort, and — most critically — <em>interest</em> (ongoing drag × probability of triggering). Rank by interest, not severity: a medium-severity item that slows every PR has higher priority than a severe item you’ll never touch.</p>
           <div class="invoke-block">
             <span class="invoke-label">Invoke when</span>
             <span class="invoke-cmd">taking a shortcut, discovering untracked debt, or reviewing before a release</span>
@@ -919,7 +921,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
           <span class="skill-oneliner">Patterns &amp; antipatterns review against project idioms</span>
         </summary>
         <div class="skill-body">
-          <p>Review code against Go idioms, the project's pure-core/thin-edges architecture, seam discipline, error handling patterns, and naming conventions. Produces a ranked findings report with file and line references. Distinct from bug-finding (<code>/code-review</code>) and mechanical formatting cleanup (<code>/simplify</code>).</p>
+          <p>Review code against Go idioms, the project’s pure-core/thin-edges architecture, seam discipline, error handling patterns, and naming conventions. Produces a ranked findings report with file and line references. Distinct from bug-finding (<code>/code-review</code>) and mechanical formatting cleanup (<code>/simplify</code>).</p>
           <div class="invoke-block">
             <span class="invoke-label">Invoke when</span>
             <span class="invoke-cmd">pre-merge quality gate, periodic code health check, or onboarding audit</span>
@@ -953,7 +955,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
         </div>
       </details>
 
-      <!-- ── Quality Engineering ─────────── -->
+      <!-- ── Quality Engineering ───────────────────── -->
       <h3>Quality Engineering</h3>
 
       <details class="skill" id="hardening-tests">
@@ -962,7 +964,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
           <span class="skill-oneliner">SDET audit — coverage gaps, weak assertions, flakes</span>
         </summary>
         <div class="skill-body">
-          <p>Audit the test suite as an SDET: identify coverage gaps, assess assertion strength, hunt flaky tests, and detect missing edge/property/fuzz cases. Doesn't write product code — only strengthens tests. Key insight: a line <em>ran</em> is not a line <em>checked</em>; mutation testing is the real coverage bar.</p>
+          <p>Audit the test suite as an SDET: identify coverage gaps, assess assertion strength, hunt flaky tests, and detect missing edge/property/fuzz cases. Doesn’t write product code — only strengthens tests. Key insight: a line <em>ran</em> is not a line <em>checked</em>; mutation testing is the real coverage bar.</p>
           <div class="invoke-block">
             <span class="invoke-label">Invoke when</span>
             <span class="invoke-cmd">pre-release hardening, after a regression, or when mutation scores are low</span>
@@ -970,7 +972,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
           <h4>Workflow</h4>
           <ol>
             <li>Scan for coverage gaps: uncovered code paths and missing error branches</li>
-            <li>Assess assertion strength — are tests checking behavior or just "no panic"?</li>
+            <li>Assess assertion strength — are tests checking behavior or just “no panic”?</li>
             <li>Run <code>flake-hunt.sh</code> to detect non-deterministic failures under the -race flag</li>
             <li>Run <code>mutation-run.sh</code> to identify surviving mutants (undertested logic)</li>
             <li>Write guard tests for any fixed bugs that are missing coverage</li>
@@ -987,7 +989,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
           <table class="data-table">
             <thead><tr><th>File</th><th>Content</th></tr></thead>
             <tbody>
-              <tr><td>assertion-strength.md</td><td>Weak vs. strong assertion patterns; how to upgrade from "no panic" to behavioral checks</td></tr>
+              <tr><td>assertion-strength.md</td><td>Weak vs. strong assertion patterns; how to upgrade from “no panic” to behavioral checks</td></tr>
               <tr><td>flake-hunting.md</td><td>Isolation strategies, common root causes, and fixes for flaky tests</td></tr>
               <tr><td>mutation-testing.md</td><td>Reading mutation results, typical survivors, and how to kill them</td></tr>
             </tbody>
@@ -1045,7 +1047,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
           <p>Two-phase exploratory QA: <strong>Phase 1</strong> is breadth — derive the full surface from code, probe all routes headlessly, cheaply. <strong>Phase 2</strong> is depth — real browser, curiosity-led investigation using accessibility-tree snapshots to chase anomalies found in Phase 1. Output is a ranked findings report saved to <code>docs/qa/exploratory-&lt;date&gt;.md</code>.</p>
           <div class="invoke-block">
             <span class="invoke-label">Invoke when</span>
-            <span class="invoke-cmd">pre-release QA pass, after a major feature, or when automated tests can't answer "is this actually good?"</span>
+            <span class="invoke-cmd">pre-release QA pass, after a major feature, or when automated tests can’t answer “is this actually good?”</span>
           </div>
           <h4>Workflow</h4>
           <ol>
@@ -1074,7 +1076,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
         </div>
       </details>
 
-      <!-- ── Design ─────────────────────── -->
+      <!-- ── Design ───────────────────────────────────── -->
       <h3>Design</h3>
 
       <details class="skill" id="designing-ui-ux">
@@ -1083,7 +1085,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
           <span class="skill-oneliner">UX heuristics · a11y audit · design tokens · htmx patterns</span>
         </summary>
         <div class="skill-body">
-          <p>Full UX/UI design loop: audit UX flows against Nielsen's 10 heuristics and Krug's principles, audit accessibility (WCAG POUR), review visual hierarchy (Refactoring-UI), update design tokens in <code>docs/DESIGN.md</code>, implement, and verify with automated scans. Design tokens as CSS custom properties prevent visual drift. Accessibility wins are locked with automated tests.</p>
+          <p>Full UX/UI design loop: audit UX flows against Nielsen’s 10 heuristics and Krug’s principles, audit accessibility (WCAG POUR), review visual hierarchy (Refactoring-UI), update design tokens in <code>docs/DESIGN.md</code>, implement, and verify with automated scans. Design tokens as CSS custom properties prevent visual drift. Accessibility wins are locked with automated tests.</p>
           <div class="invoke-block">
             <span class="invoke-label">Invoke when</span>
             <span class="invoke-cmd">designing new UI, auditing existing UX, addressing a11y issues, or updating design tokens</span>
@@ -1109,7 +1111,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
           <table class="data-table">
             <thead><tr><th>File</th><th>Content</th></tr></thead>
             <tbody>
-              <tr><td>ux-heuristics.md</td><td>Nielsen's 10 usability heuristics + Krug's "Don't Make Me Think" principles applied to web UX</td></tr>
+              <tr><td>ux-heuristics.md</td><td>Nielsen’s 10 usability heuristics + Krug’s “Don’t Make Me Think” principles applied to web UX</td></tr>
               <tr><td>wcag-pour.md</td><td>WCAG 2.1/2.2 Perceivable/Operable/Understandable/Robust checklist</td></tr>
               <tr><td>refactoring-ui.md</td><td>Visual hierarchy, spacing, typography, and color contrast principles</td></tr>
               <tr><td>design-tokens.md</td><td>CSS custom property token schema — how to define, document, and use tokens</td></tr>
@@ -1156,7 +1158,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
         </div>
         <div class="principle-card">
           <div class="title">Two-phase QA</div>
-          <div class="body">Breadth first (cheap, headless, full surface), then depth (real browser, curiosity-led, chasing anomalies). Don't go deep before going wide.</div>
+          <div class="body">Breadth first (cheap, headless, full surface), then depth (real browser, curiosity-led, chasing anomalies). Don’t go deep before going wide.</div>
         </div>
         <div class="principle-card">
           <div class="title">Constitution pattern</div>
