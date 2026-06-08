@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Claude Code Ecosystem — orchestra-skills docs</title>
+<meta name="description" content="Complete reference for Claude Code built-in commands, bundled skills, bundled workflows, and pre-built Agent Skills. All 60+ commands documented." />
+<style>
+  :root {
+    --bg: #15171a; --panel: #1e2125; --panel2: #0f1113;
+    --fg: #e7e9ea; --dim: #9aa3ad; --line: #2c3036;
+    --accent: #d98c5f; --accent2: #6ea8fe; --good: #7ee787;
+    --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    --sidebar-w: 228px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body { background: var(--bg); color: var(--fg); font: 15px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  a { color: var(--accent2); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ── Top Nav ─────────────────────────── */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(21,23,26,.96);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    padding: 0 24px; display: flex; align-items: center; height: 52px;
+  }
+  .topnav-brand { font-weight: 600; color: var(--fg); font-size: .95rem; margin-right: auto; text-decoration: none; letter-spacing: -.01em; }
+  .topnav-brand:hover { text-decoration: none; color: var(--fg); }
+  .topnav-brand .glyph { color: var(--accent); margin-right: 6px; }
+  .topnav-links { display: flex; gap: 2px; }
+  .topnav-links a { padding: 6px 13px; border-radius: 6px; color: var(--dim); font-size: .875rem; font-weight: 500; transition: color .15s, background .15s; }
+  .topnav-links a:hover { color: var(--fg); text-decoration: none; background: rgba(255,255,255,.05); }
+  .topnav-links a.active { color: var(--fg); background: rgba(255,255,255,.08); }
+
+  /* ── Header ─────────────────────────────── */
+  header { padding: 56px 24px 40px; text-align: center; background: radial-gradient(1400px 500px at 50% -10%, #23272d, var(--bg)); border-bottom: 1px solid var(--line); }
+  header h1 { font-size: 2.6rem; letter-spacing: -.03em; margin-bottom: 10px; }
+  header h1 .glyph { color: var(--accent2); }
+  .tagline { color: var(--dim); font-size: 1.05rem; max-width: 680px; margin: 0 auto 22px; }
+  .badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .badge { font: 12px var(--mono); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 5px 13px; color: var(--dim); }
+
+  /* ── Page layout ─────────────────────────── */
+  .page-layout { display: grid; grid-template-columns: var(--sidebar-w) 1fr; max-width: 1280px; margin: 0 auto; padding: 0 24px; gap: 48px; align-items: start; }
+
+  /* ── Sidebar ─────────────────────────────── */
+  .sidebar { position: sticky; top: 76px; padding: 28px 0; align-self: start; max-height: calc(100vh - 100px); overflow-y: auto; }
+  .sidebar nav h4 { color: var(--dim); font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; margin: 20px 0 6px; padding: 0 10px; }
+  .sidebar nav h4:first-child { margin-top: 0; }
+  .sidebar nav a { display: block; padding: 4px 10px; color: var(--dim); border-radius: 6px; border-left: 2px solid transparent; font-size: .9rem; transition: color .15s, border-color .15s, background .15s; }
+  .sidebar nav a:hover { color: var(--fg); text-decoration: none; border-left-color: var(--accent); background: rgba(255,255,255,.03); }
+  .sidebar nav a.sub { font: 12px/1.9 var(--mono); padding: 2px 10px; }
+  .sidebar nav a.sub:hover { color: var(--accent2); }
+
+  /* ── Main content ────────────────────────── */
+  .content { padding: 32px 0 80px; min-width: 0; }
+  .content section { margin-bottom: 60px; }
+  .content h2 { font-size: 1.65rem; letter-spacing: -.02em; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+  .content h3 { font-size: .82rem; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; margin: 32px 0 12px; }
+  .content p { color: var(--dim); margin-bottom: 12px; line-height: 1.7; }
+  .content p:last-child { margin-bottom: 0; }
+  .content strong { color: var(--fg); }
+
+  /* ── Code ────────────────────────────────── */
+  pre { background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; overflow-x: auto; font: 13px/1.6 var(--mono); color: var(--fg); margin: 12px 0; }
+  code { font: 13px var(--mono); color: var(--good); }
+  pre code { color: inherit; font-size: inherit; }
+  .dim { color: var(--dim); }
+  .hl { color: var(--accent2); }
+  .acc { color: var(--accent); }
+
+  /* ── Tables ──────────────────────────────── */
+  .cmd-table { width: 100%; border-collapse: collapse; font-size: .875rem; margin-top: 4px; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .cmd-table th { text-align: left; font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--dim); padding: 6px 12px; border-bottom: 1px solid var(--line); font-weight: 600; }
+  .cmd-table td { padding: 7px 12px; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.5; }
+  .cmd-table tr:last-child td { border-bottom: none; }
+  .cmd-table td:first-child { font: 12px var(--mono); color: var(--accent2); white-space: nowrap; }
+  .cmd-table td:last-child { color: var(--dim); }
+  .tag { display: inline-block; font: .68rem var(--mono); padding: 1px 6px; border-radius: 4px; vertical-align: middle; margin-left: 6px; white-space: nowrap; }
+  .tag-skill { background: rgba(110,168,254,.12); color: var(--accent2); border: 1px solid rgba(110,168,254,.2); }
+  .tag-wf { background: rgba(217,140,95,.12); color: var(--accent); border: 1px solid rgba(217,140,95,.2); }
+
+  /* ── Category header ─────────────────────── */
+  .cmd-section { margin: 28px 0 0; }
+  .cmd-section h4 { font-size: .78rem; color: var(--accent2); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 8px; }
+
+  /* ── Skill cards ─────────────────────────── */
+  details.skill { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
+  details.skill summary { display: flex; align-items: baseline; gap: 14px; padding: 14px 18px; cursor: pointer; list-style: none; user-select: none; }
+  details.skill summary::-webkit-details-marker { display: none; }
+  details.skill summary::before { content: "▶"; font-size: 9px; color: var(--dim); flex-shrink: 0; transition: transform .2s; margin-top: 2px; }
+  details.skill[open] summary::before { transform: rotate(90deg); }
+  details.skill summary .skill-name { font: 600 14px var(--mono); color: var(--accent2); flex-shrink: 0; min-width: 210px; }
+  details.skill summary .skill-oneliner { color: var(--dim); font-size: .9rem; }
+  .skill-body { padding: 0 18px 20px; border-top: 1px solid var(--line); }
+  .skill-body > p { margin-top: 14px; }
+  .skill-body h4 { font-size: .77rem; text-transform: uppercase; letter-spacing: .07em; color: var(--accent); margin: 20px 0 8px; }
+  .skill-body ul, .skill-body ol { color: var(--dim); padding-left: 20px; }
+  .skill-body li { margin-bottom: 5px; line-height: 1.6; }
+
+  /* ── Workflow cards ──────────────────────── */
+  .wf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 14px; }
+  .wf-card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .wf-card .wf-cmd { font: 600 13px var(--mono); color: var(--accent); margin-bottom: 6px; }
+  .wf-card .wf-title { font-weight: 600; font-size: .95rem; color: var(--fg); margin-bottom: 6px; }
+  .wf-card .wf-desc { color: var(--dim); font-size: .875rem; line-height: 1.55; }
+
+  /* ── Agent skill cards ───────────────────── */
+  .agent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 14px; }
+  .agent-card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .agent-card .agent-id { font: 600 14px var(--mono); color: var(--good); margin-bottom: 6px; }
+  .agent-card .agent-desc { color: var(--dim); font-size: .875rem; line-height: 1.55; }
+
+  /* ── Level diagram ───────────────────────── */
+  .level-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+  .level-card { background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+  .level-card .lv { font: 600 11px var(--mono); color: var(--accent); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+  .level-card .lv-title { font-weight: 600; font-size: .95rem; color: var(--fg); margin-bottom: 4px; }
+  .level-card .lv-when { font-size: .8rem; color: var(--accent2); margin-bottom: 6px; font-family: var(--mono); }
+  .level-card .lv-desc { color: var(--dim); font-size: .85rem; line-height: 1.5; }
+
+  /* ── Callout ─────────────────────────────── */
+  .callout { background: var(--panel); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 14px 0; color: var(--dim); font-size: .9rem; line-height: 1.6; }
+  .callout strong { color: var(--fg); }
+
+  /* ── Footer ──────────────────────────────── */
+  footer { text-align: center; color: var(--dim); padding: 32px; font-size: .875rem; border-top: 1px solid var(--line); }
+
+  /* ── Responsive ──────────────────────────── */
+  @media (max-width: 920px) {
+    .page-layout { grid-template-columns: 1fr; gap: 0; padding: 0 20px; }
+    .sidebar { display: none; }
+    header h1 { font-size: 2rem; }
+    details.skill summary .skill-name { min-width: 0; }
+  }
+  @media (max-width: 600px) {
+    header { padding: 36px 16px 28px; }
+    .page-layout { padding: 0 16px; }
+    .topnav { padding: 0 16px; }
+    .topnav-links a { padding: 6px 9px; font-size: .78rem; }
+    .topnav-brand { font-size: .875rem; }
+    details.skill summary { flex-wrap: wrap; gap: 6px; padding: 12px 14px; min-height: 48px; }
+    .wf-grid, .agent-grid, .level-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="topnav-brand"><span class="glyph">◆</span> orchestra-skills</a>
+  <div class="topnav-links">
+    <a href="index.html">Plugin Skills</a>
+    <a href="claude-code.html" class="active">Claude Code</a>
+    <a href="research.html">Research</a>
+  </div>
+</nav>
+
+<header>
+  <h1><span class="glyph">⌨</span> Claude Code Ecosystem</h1>
+  <p class="tagline">Complete reference for every built-in command, bundled skill, bundled workflow, and pre-built Agent Skill shipping with Claude Code.</p>
+  <div class="badges">
+    <span class="badge">60+ commands</span>
+    <span class="badge">10 bundled skills</span>
+    <span class="badge">3 workflows</span>
+    <span class="badge">4 agent skills</span>
+  </div>
+</header>
+
+<div class="page-layout">
+
+  <aside class="sidebar">
+    <nav>
+      <h4>Skills Architecture</h4>
+      <a href="#what-are-skills">What are Skills?</a>
+      <a href="#how-skills-work">How Skills Work</a>
+      <a href="#skill-types">Skill Types</a>
+
+      <h4>Built-in Commands</h4>
+      <a href="#commands">All Commands</a>
+      <a href="#cmd-session" class="sub">Session & Navigation</a>
+      <a href="#cmd-context" class="sub">Context Management</a>
+      <a href="#cmd-model" class="sub">Model & Planning</a>
+      <a href="#cmd-review" class="sub">Code & Review</a>
+      <a href="#cmd-parallel" class="sub">Parallel Work</a>
+      <a href="#cmd-run" class="sub">Run & Verify</a>
+      <a href="#cmd-workflows" class="sub">Workflows</a>
+      <a href="#cmd-config" class="sub">Config & Settings</a>
+      <a href="#cmd-info" class="sub">Info & Diagnostics</a>
+      <a href="#cmd-integrations" class="sub">Integrations</a>
+
+      <h4>Bundled Skills</h4>
+      <a href="#bundled-skills">Overview</a>
+      <a href="#skill-batch" class="sub">batch</a>
+      <a href="#skill-claude-api" class="sub">claude-api</a>
+      <a href="#skill-code-review" class="sub">code-review</a>
+      <a href="#skill-debug" class="sub">debug</a>
+      <a href="#skill-fewer-prompts" class="sub">fewer-permission-prompts</a>
+      <a href="#skill-loop" class="sub">loop</a>
+      <a href="#skill-run" class="sub">run</a>
+      <a href="#skill-run-gen" class="sub">run-skill-generator</a>
+      <a href="#skill-simplify" class="sub">simplify</a>
+      <a href="#skill-verify" class="sub">verify</a>
+
+      <h4>Workflows &amp; Agents</h4>
+      <a href="#bundled-workflows">Bundled Workflows</a>
+      <a href="#agent-skills">Pre-built Agent Skills</a>
+    </nav>
+  </aside>
+
+  <main class="content">
+
+    <!-- WHAT ARE SKILLS -->
+    <section id="what-are-skills">
+      <h2>What are Skills?</h2>
+      <p>
+        A <strong>Claude Code skill</strong> is a directory containing a <code>SKILL.md</code> file —
+        a markdown document with YAML frontmatter (metadata) followed by a markdown body (instructions).
+        Claude Code discovers skills at startup, loads their metadata into the system prompt, then reads
+        the full body only when that skill becomes relevant to the current task.
+      </p>
+      <p>
+        Skills are the evolution of custom slash commands. A file at <code>.claude/commands/deploy.md</code>
+        and a skill at <code>.claude/skills/deploy/SKILL.md</code> both create <code>/deploy</code> and work
+        the same way — but skills add a supporting file directory, invocation control, subagent execution,
+        and dynamic context injection.
+      </p>
+      <pre>---
+name: your-skill-name          <span class="dim"># kebab-case, max 64 chars</span>
+description: >                 <span class="dim"># what it does AND when to trigger it</span>
+  Analyzes Excel spreadsheets. Use when analyzing spreadsheets or .xlsx files.
+allowed-tools: Read, Bash, Glob
+---
+
+## Instructions
+…</pre>
+      <div class="callout">
+        <strong>Custom commands have merged into skills.</strong>
+        Your existing <code>.claude/commands/</code> files keep working.
+        New ones should go in <code>.claude/skills/</code> for the additional features.
+      </div>
+    </section>
+
+    <!-- HOW SKILLS WORK -->
+    <section id="how-skills-work">
+      <h2>How Skills Work</h2>
+      <p>Skills use <strong>progressive disclosure</strong> — Claude loads information in stages as needed, rather than consuming context upfront. Three levels:</p>
+      <div class="level-grid">
+        <div class="level-card">
+          <div class="lv">Level 1</div>
+          <div class="lv-title">Metadata</div>
+          <div class="lv-when">Always loaded at startup</div>
+          <div class="lv-desc"><code>name</code> and <code>description</code> from YAML frontmatter. ~100 tokens per skill. How Claude knows the skill exists and when to use it.</div>
+        </div>
+        <div class="level-card">
+          <div class="lv">Level 2</div>
+          <div class="lv-title">Instructions</div>
+          <div class="lv-when">When skill is triggered</div>
+          <div class="lv-desc">Full <code>SKILL.md</code> body: workflows, rules, patterns. Under 5 000 tokens. Claude reads this via bash when the task matches.</div>
+        </div>
+        <div class="level-card">
+          <div class="lv">Level 3</div>
+          <div class="lv-title">Resources &amp; Scripts</div>
+          <div class="lv-when">Only when referenced</div>
+          <div class="lv-desc">Bundled reference files, templates, and scripts. Scripts are <em>executed</em>, not loaded — only their output costs tokens. Effectively unlimited.</div>
+        </div>
+      </div>
+      <h3>Where skills live</h3>
+      <pre>~/.claude/skills/        <span class="dim">← personal (all your projects)</span>
+.claude/skills/          <span class="dim">← project-scoped (checked in)</span>
+~/.claude/plugins/       <span class="dim">← installed plugins (bundled sets)</span></pre>
+    </section>
+
+    <!-- SKILL TYPES -->
+    <section id="skill-types">
+      <h2>Skill Types</h2>
+      <p>Two fundamental categories:</p>
+      <div class="level-grid">
+        <div class="level-card">
+          <div class="lv">Type 1</div>
+          <div class="lv-title">Capability Uplift</div>
+          <div class="lv-desc">Grants Claude new abilities it doesn't have on its own: PDF extraction, browser automation, chaos experiments, web scraping. Usually includes executable scripts.</div>
+        </div>
+        <div class="level-card">
+          <div class="lv">Type 2</div>
+          <div class="lv-title">Encoded Preference</div>
+          <div class="lv-desc">Captures <em>how your team</em> does something Claude already knows: ADR format, commit message style, TDD gate commands, code review checklist. Usually just a <code>SKILL.md</code>.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ALL COMMANDS -->
+    <section id="commands">
+      <h2>All Built-in Commands</h2>
+      <p>
+        Commands marked <span class="tag tag-skill">skill</span> are bundled skills (prompt-driven, also auto-triggered by Claude).
+        Commands marked <span class="tag tag-wf">workflow</span> are multi-agent fan-out workflows.
+        All others are built into the CLI binary.
+      </p>
+      <p><em>Availability varies by platform, plan, and Claude Code version. Use <code>/help</code> as the authoritative source for your installation.</em></p>
+
+      <div class="cmd-section" id="cmd-session">
+        <h4>Session &amp; Navigation</h4>
+        <table class="cmd-table">
+          <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td>/clear [name]</td><td>Start a new conversation; previous stays in /resume. Aliases: /reset, /new</td></tr>
+            <tr><td>/resume [session]</td><td>Reopen a past conversation by ID, name, or picker. Alias: /continue</td></tr>
+            <tr><td>/branch [name]</td><td>Fork the current conversation to try a different direction without losing it</td></tr>
+            <tr><td>/fork &lt;directive&gt;</td><td>Spawn a background subagent that inherits full context and works on the directive while you continue</td></tr>
+            <tr><td>/background [prompt]</td><td>Detach current session to run as a background agent and free the terminal. Alias: /bg</td></tr>
+            <tr><td>/rewind</td><td>Roll code and conversation back to a checkpoint. Aliases: /checkpoint, /undo</td></tr>
+            <tr><td>/btw &lt;question&gt;</td><td>Quick side question that doesn't add to conversation history</td></tr>
+            <tr><td>/teleport</td><td>Pull a Claude Code on the web session into this terminal. Alias: /tp</td></tr>
+            <tr><td>/add-dir &lt;path&gt;</td><td>Add a working directory for file access during the current session</td></tr>
+            <tr><td>/stop</td><td>Stop an attached background session (keeps transcript and worktree)</td></tr>
+            <tr><td>/exit</td><td>Exit the CLI or detach from a background session. Alias: /quit</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cmd-section" id="cmd-context">
+        <h4>Context Management</h4>
+        <table class="cmd-table">
+          <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td>/compact [instructions]</td><td>Summarize the conversation to free context; pass focus instructions to guide the summary</td></tr>
+            <tr><td>/context [all]</td><td>Visualize context window usage as a colored grid; shows optimization suggestions</td></tr>
+            <tr><td>/diff</td><td>Interactive diff viewer — uncommitted changes and per-turn diffs; use arrows to navigate</td></tr>
+            <tr><td>/copy [N]</td><td>Copy last (or Nth-to-last) response to clipboard; interactive block picker when code blocks are present</td></tr>
+            <tr><td>/export [filename]</td><td>Export the current conversation as plain text</td></tr>
+            <tr><td>/recap</td><td>Generate a one-line summary of the current session on demand</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cmd-section" id="cmd-model">
+        <h4>Model &amp; Planning</h4>
+        <table class="cmd-table">
+          <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td>/model [model]</td><td>Switch AI model and save as default; interactive picker shows effort slider where supported</td></tr>
+            <tr><td>/effort [level|auto]</td><td>Set reasoning effort: low, medium, high, xhigh, max, ultracode. Interactive slider without argument</td></tr>
+            <tr><td>/fast [on|off]</td><td>Toggle fast mode (Opus with faster output)</td></tr>
+            <tr><td>/plan [description]</td><td>Enter plan mode directly; pass optional description to start immediately</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cmd-section" id="cmd-review">
+        <h4>Code &amp; Review</h4>
+        <table class="cmd-table">
+          <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td>/code-review [level] [--fix] [--comment] [target]</td><td>Review diff for correctness bugs + cleanups. Levels: low, medium, high, xhigh, max, ultra (cloud). --fix applies; --comment posts as PR comments <span class="tag tag-skill">skill</span></td></tr>
+            <tr><td>/simplify [target]</td><td>Cleanup-only review (v2.1.154+): 4 parallel agents covering reuse, simplification, efficiency, abstraction. Does not hunt bugs <span class="tag tag-skill">skill</span></td></tr>
+            <tr><td>/review [PR]</td><td>Review a pull request locally in the current session</td></tr>
+            <tr><td>/security-review</td><td>Analyze pending branch changes for security vulnerabilities; identifies injection, auth, and exposure risks</td></tr>
+            <tr><td>/diff</td><td>Interactive diff viewer showing uncommitted changes and per-turn diffs</td></tr>
+            <tr><td>/autofix-pr [prompt]</td><td>Spawn cloud session to watch PR and push fixes when CI fails or reviewers comment</td></tr>
+            <tr><td>/ultrareview [PR]</td><td>Alias for /code-review ultra — deep multi-agent cloud review (3 free runs on Pro/Max) <span class="tag tag-wf">workflow</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cmd-section" id="cmd-parallel">
+        <h4>Parallel Work</h4>
+        <table class="cmd-table">
+          <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td>/batch &lt;instruction&gt;</td><td>Orchestrate large-scale parallel codebase changes: 5–30 units, one background subagent per unit in isolated worktrees <span class="tag tag-skill">skill</span></td></tr>
+            <tr><td>/agents</td><td>Manage agent configurations and subagent definitions</td></tr>
+            <tr><td>/tasks</td><td>View and manage everything running in the background. Alias: /bashes</td></tr>
+            <tr><td>/goal [condition|clear]</td><td>Set a goal; Claude keeps working until the condition is met</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cmd-section" id="cmd-run">
+        <h4>Run &amp; Verify</h4>
+        <table class="cmd-table">
+          <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td>/run</td><td>Launch and drive your project's app to observe changes working in the running app, not just in tests <span class="tag tag-skill">skill</span></td></tr>
+            <tr><td>/verify</td><td>Confirm a code change does what it should by building and running the app, then observing results <span class="tag tag-skill">skill</span></td></tr>
+            <tr><td>/run-skill-generator</td><td>Teach /run and /verify how to launch your specific project by writing a per-project skill <span class="tag tag-skill">skill</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cmd-section" id="cmd-workflows">
+        <h4>Workflows &amp; Schedules</h4>
+        <table class="cmd-table">
+          <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td>/deep-research &lt;question&gt;</td><td>Fan out web searches, fetch and cross-check sources, synthesize a cited report <span class="tag tag-wf">workflow</span></td></tr>
+            <tr><td>/ultraplan &lt;prompt&gt;</td><td>Draft a plan in your browser, review it, then execute remotely or return to terminal <span class="tag tag-wf">workflow</span></td></tr>
+            <tr><td>/workflows</td><td>View, pause, resume, or save running and completed workflows</td></tr>
+            <tr><td>/loop [interval] [prompt]</td><td>Run a prompt repeatedly; Claude self-paces if no interval given. Alias: /proactive <span class="tag tag-skill">skill</span></td></tr>
+            <tr><td>/schedule [description]</td><td>Create/manage routines on Anthropic cloud infrastructure. Alias: /routines</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cmd-section" id="cmd-config">
+        <h4>Config &amp; Settings</h4>
+        <table class="cmd-table">
+          <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td>/config</td><td>Open Settings UI: theme, model, output style, editor mode. Alias: /settings</td></tr>
+            <tr><td>/permissions</td><td>Manage allow/ask/deny rules for tool permissions. Alias: /allowed-tools</td></tr>
+            <tr><td>/memory</td><td>Edit CLAUDE.md memory files, enable/disable auto-memory, view auto-memory entries</td></tr>
+            <tr><td>/mcp</td><td>Manage MCP server connections and OAuth authentication</td></tr>
+            <tr><td>/hooks</td><td>View hook configurations for tool events</td></tr>
+            <tr><td>/keybindings</td><td>Open your keyboard shortcuts file (~/.claude/keybindings.json)</td></tr>
+            <tr><td>/init</td><td>Initialize project with a CLAUDE.md guide; set CLAUDE_CODE_NEW_INIT=1 for interactive flow</td></tr>
+            <tr><td>/skills</td><td>List available skills; press t to sort by tokens; space to toggle visibility</td></tr>
+            <tr><td>/plugin [subcommand]</td><td>Manage Claude Code plugins: list, install, enable, disable</td></tr>
+            <tr><td>/reload-plugins [--force]</td><td>Reload all active plugins to apply changes without restarting</td></tr>
+            <tr><td>/reload-skills</td><td>Re-scan skill directories so skills added/changed on disk become available (v2.1.152+)</td></tr>
+            <tr><td>/sandbox</td><td>Toggle sandbox mode (supported platforms only)</td></tr>
+            <tr><td>/theme</td><td>Change color theme; includes auto (matches terminal), colorblind-accessible, ANSI, and custom themes</td></tr>
+            <tr><td>/color [color]</td><td>Set the prompt bar color for the current session: red, blue, green, yellow, purple, orange, pink, cyan</td></tr>
+            <tr><td>/tui [default|fullscreen]</td><td>Set terminal UI renderer and relaunch with conversation intact</td></tr>
+            <tr><td>/statusline</td><td>Configure the Claude Code status line</td></tr>
+            <tr><td>/terminal-setup</td><td>Configure terminal keybindings for Shift+Enter and other shortcuts</td></tr>
+            <tr><td>/fewer-permission-prompts</td><td>Scan transcripts for common tool calls and add prioritized allowlist to settings.json <span class="tag tag-skill">skill</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cmd-section" id="cmd-info">
+        <h4>Info &amp; Diagnostics</h4>
+        <table class="cmd-table">
+          <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td>/help</td><td>Show help and all available commands for your current version</td></tr>
+            <tr><td>/status</td><td>Version, model, account, and connectivity (works while Claude is responding)</td></tr>
+            <tr><td>/usage</td><td>Session cost, plan limits, activity stats, breakdown by skill/agent/plugin. Aliases: /cost, /stats</td></tr>
+            <tr><td>/insights</td><td>Generate a report analyzing your sessions: project areas, interaction patterns, friction points</td></tr>
+            <tr><td>/doctor</td><td>Diagnose installation and settings; press f to have Claude fix reported issues</td></tr>
+            <tr><td>/debug [description]</td><td>Enable debug logging and read session debug log to troubleshoot issues <span class="tag tag-skill">skill</span></td></tr>
+            <tr><td>/heapdump</td><td>Write a JS heap snapshot for diagnosing high memory usage</td></tr>
+            <tr><td>/feedback [report]</td><td>Submit feedback or report a bug with session context attached. Aliases: /bug, /share</td></tr>
+            <tr><td>/release-notes</td><td>View the changelog in an interactive version picker</td></tr>
+            <tr><td>/team-onboarding</td><td>Generate a team onboarding guide from your last 30 days of Claude Code usage</td></tr>
+            <tr><td>/powerup</td><td>Discover Claude Code features through quick interactive animated lessons</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cmd-section" id="cmd-integrations">
+        <h4>Integrations &amp; Account</h4>
+        <table class="cmd-table">
+          <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td>/install-github-app</td><td>Set up the Claude GitHub Actions integration for a repository</td></tr>
+            <tr><td>/install-slack-app</td><td>Install the Claude Slack app via OAuth flow</td></tr>
+            <tr><td>/web-setup</td><td>Connect GitHub account to Claude Code on the web using local gh CLI credentials</td></tr>
+            <tr><td>/remote-control</td><td>Make this session available for remote control from claude.ai. Alias: /rc</td></tr>
+            <tr><td>/remote-env</td><td>Choose the default environment for cloud agents</td></tr>
+            <tr><td>/desktop</td><td>Continue the current session in the Claude Code Desktop app. Alias: /app</td></tr>
+            <tr><td>/setup-bedrock</td><td>Configure Amazon Bedrock authentication, region, and model pins interactively</td></tr>
+            <tr><td>/setup-vertex</td><td>Configure Google Vertex AI authentication, project, region, and model pins interactively</td></tr>
+            <tr><td>/chrome</td><td>Configure Claude in Chrome settings</td></tr>
+            <tr><td>/ide</td><td>Manage IDE integrations (VS Code, JetBrains) and show status</td></tr>
+            <tr><td>/mobile</td><td>Show QR code to download the Claude mobile app. Aliases: /ios, /android</td></tr>
+            <tr><td>/login</td><td>Sign in to your Anthropic account</td></tr>
+            <tr><td>/logout</td><td>Sign out from your Anthropic account</td></tr>
+            <tr><td>/upgrade</td><td>Open the upgrade page to switch to a higher plan tier</td></tr>
+            <tr><td>/usage-credits</td><td>Configure usage credits to keep working when you hit a plan limit</td></tr>
+            <tr><td>/rename [name]</td><td>Rename the current session and show the name on the prompt bar</td></tr>
+            <tr><td>/radio</td><td>Open Claude FM lo-fi radio in your browser</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- BUNDLED SKILLS -->
+    <section id="bundled-skills">
+      <h2>Bundled Skills</h2>
+      <p>
+        These 10 skills ship with Claude Code and follow the same SKILL.md format as custom skills —
+        they are prompts handed to Claude, which Claude can also invoke automatically when relevant.
+        They appear as slash commands but their logic is a skill file, not CLI binary code.
+      </p>
+
+      <details class="skill" id="skill-batch">
+        <summary>
+          <span class="skill-name">batch</span>
+          <span class="skill-oneliner">Parallel large-scale codebase changes in isolated worktrees</span>
+        </summary>
+        <div class="skill-body">
+          <p>Orchestrates large-scale changes across a codebase in parallel. Researches the codebase, decomposes the work into 5 to 30 independent units, and presents a plan. Once approved, spawns one background subagent per unit in an isolated git worktree. Each subagent implements its unit, runs tests, and opens a pull request.</p>
+          <h4>Usage</h4>
+          <pre>/batch migrate src/ from Solid to React
+/batch add JSDoc to every exported function in lib/</pre>
+          <h4>Requirements</h4>
+          <ul>
+            <li>Git repository required (worktrees are how isolation is achieved)</li>
+            <li>Review the decomposition plan before approving — each unit should be independently mergeable</li>
+            <li>Each subagent runs /verify on its unit before opening a PR</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="skill" id="skill-claude-api">
+        <summary>
+          <span class="skill-name">claude-api</span>
+          <span class="skill-oneliner">Claude API reference for 8 languages + model migration</span>
+        </summary>
+        <div class="skill-body">
+          <p>Loads up-to-date Claude API reference material for your project's language (Python, TypeScript, Java, Go, Ruby, C#, PHP, or cURL) and Managed Agents reference. Also activates automatically when your code imports <code>anthropic</code> or <code>@anthropic-ai/sdk</code>.</p>
+          <h4>Sub-commands</h4>
+          <ul>
+            <li><code>/claude-api migrate</code> — scan files for old model IDs and update to new ones; handles thinking config and parameter changes between versions</li>
+            <li><code>/claude-api managed-agents-onboard</code> — interactive walkthrough to create a new Managed Agent from scratch</li>
+          </ul>
+          <h4>Covers</h4>
+          <ul>
+            <li>Tool use, streaming, batches, structured outputs</li>
+            <li>Common pitfalls per language SDK</li>
+            <li>Model IDs and their parameters</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="skill" id="skill-code-review">
+        <summary>
+          <span class="skill-name">code-review</span>
+          <span class="skill-oneliner">Diff review for correctness bugs and cleanups — local or cloud</span>
+        </summary>
+        <div class="skill-body">
+          <p>Reviews the current diff for correctness bugs and reuse/simplification/efficiency cleanups. Four parallel review agents run locally; <code>ultra</code> fans out to a cloud sandbox for a deeper read.</p>
+          <h4>Effort levels</h4>
+          <table class="cmd-table">
+            <thead><tr><th>Level</th><th>Coverage</th></tr></thead>
+            <tbody>
+              <tr><td>low / medium</td><td>Fewer, high-confidence findings only</td></tr>
+              <tr><td>high → max</td><td>Broader coverage including uncertain findings</td></tr>
+              <tr><td>ultra</td><td>Deep multi-agent cloud review (3 free runs on Pro/Max)</td></tr>
+            </tbody>
+          </table>
+          <h4>Flags</h4>
+          <ul>
+            <li><code>--fix</code> — apply all findings to working tree automatically</li>
+            <li><code>--comment</code> — post findings as inline GitHub PR comments</li>
+            <li><code>[target]</code> — specific path or PR reference to review</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="skill" id="skill-debug">
+        <summary>
+          <span class="skill-name">debug</span>
+          <span class="skill-oneliner">Enable debug logging and read session logs to troubleshoot</span>
+        </summary>
+        <div class="skill-body">
+          <p>Enables debug logging for the current session and troubleshoots issues by reading the session debug log. Debug logging is off by default unless you started with <code>claude --debug</code>, so running <code>/debug</code> mid-session starts capturing logs from that point forward.</p>
+          <h4>Usage</h4>
+          <pre>/debug                          <span class="dim"># enable logging, run auto-diagnosis</span>
+/debug high memory usage        <span class="dim"># focus analysis on a specific issue</span></pre>
+        </div>
+      </details>
+
+      <details class="skill" id="skill-fewer-prompts">
+        <summary>
+          <span class="skill-name">fewer-permission-prompts</span>
+          <span class="skill-oneliner">Auto-build tool allowlist from transcript history</span>
+        </summary>
+        <div class="skill-body">
+          <p>Scans your transcripts for common read-only Bash and MCP tool calls, then adds a prioritized allowlist to the project <code>.claude/settings.json</code> to reduce permission prompts on subsequent runs. Only approves patterns Claude already performs in your sessions — nothing new is added.</p>
+          <h4>When to run</h4>
+          <ul>
+            <li>After several sessions in a new project where permission prompts interrupt flow</li>
+            <li>When setting up a project for team members who don't want to approve common read operations</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="skill" id="skill-loop">
+        <summary>
+          <span class="skill-name">loop</span>
+          <span class="skill-oneliner">Run a prompt on a recurring interval</span>
+        </summary>
+        <div class="skill-body">
+          <p>Runs a prompt repeatedly while the session stays open. Omit the interval and Claude self-paces between iterations. Omit the prompt and Claude runs an autonomous maintenance check (or the prompt in <code>.claude/loop.md</code> if present).</p>
+          <h4>Usage</h4>
+          <pre>/loop 5m check if the deploy finished
+/loop 10m run tests and report failures
+/loop                              <span class="dim"># autonomous maintenance mode</span></pre>
+        </div>
+      </details>
+
+      <details class="skill" id="skill-run">
+        <summary>
+          <span class="skill-name">run</span>
+          <span class="skill-oneliner">Launch and drive the project app to observe changes live</span>
+        </summary>
+        <div class="skill-body">
+          <p>Launches and drives your project's app to see a change working in the running application, not just in tests or type checks. Claude builds the project, starts the server or binary, exercises the feature, and reports what it observed.</p>
+          <h4>How it knows your project</h4>
+          <p>Run <code>/run-skill-generator</code> once to teach Claude how to build and launch your specific project. The generator writes a per-project skill file that <code>/run</code> and <code>/verify</code> use on every subsequent call.</p>
+          <h4>Requires</h4>
+          <p>Claude Code v2.1.145 or later.</p>
+        </div>
+      </details>
+
+      <details class="skill" id="skill-run-gen">
+        <summary>
+          <span class="skill-name">run-skill-generator</span>
+          <span class="skill-oneliner">Write the per-project launch skill for /run and /verify</span>
+        </summary>
+        <div class="skill-body">
+          <p>Teaches <code>/run</code> and <code>/verify</code> how to build, launch, and drive your project's app from a clean environment. Writes a per-project skill file in <code>.claude/skills/</code>. Run this once when you first use <code>/run</code> on a new project.</p>
+          <h4>What it creates</h4>
+          <ul>
+            <li>Detect build system (Go, Node, Python, etc.)</li>
+            <li>Build command + start command</li>
+            <li>How to verify the app is running and ready</li>
+            <li>Project-specific interaction patterns</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="skill" id="skill-simplify">
+        <summary>
+          <span class="skill-name">simplify</span>
+          <span class="skill-oneliner">Cleanup-only code review — no bug hunting, just cleanups applied</span>
+        </summary>
+        <div class="skill-body">
+          <p>Reviews changed code for cleanup opportunities and applies the fixes. Four review agents run in parallel, each covering a different dimension: reuse of existing helpers, simplification of logic, efficiency improvements, and whether the change sits at the right level of abstraction.</p>
+          <h4>Key distinction from /code-review</h4>
+          <p><code>/simplify</code> does <strong>not</strong> hunt for correctness bugs — it only improves code structure and clarity. Use <code>/code-review</code> for bug finding.</p>
+          <h4>Requires</h4>
+          <p>Claude Code v2.1.154 or later. On earlier versions, <code>/simplify</code> is equivalent to <code>/code-review --fix</code>.</p>
+        </div>
+      </details>
+
+      <details class="skill" id="skill-verify">
+        <summary>
+          <span class="skill-name">verify</span>
+          <span class="skill-oneliner">Confirm a change works in the running app, not just tests</span>
+        </summary>
+        <div class="skill-body">
+          <p>Confirms a code change does what it should by building the project's app, running it, and observing the result — rather than relying on tests or type checks alone. Pairs with <code>/run</code>: use <code>/run</code> to explore, <code>/verify</code> to confirm a specific change works.</p>
+          <h4>Difference from running tests</h4>
+          <p>Tests verify code correctness. <code>/verify</code> verifies feature correctness — it actually drives the running application and observes behavior, catching issues tests can't see (CSS regressions, interaction bugs, environment differences).</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- BUNDLED WORKFLOWS -->
+    <section id="bundled-workflows">
+      <h2>Bundled Workflows</h2>
+      <p>Workflows are dynamic multi-agent fan-outs that run in the background. Unlike skills (which run in the current session), workflows spawn multiple sub-sessions and return synthesized results.</p>
+      <div class="wf-grid">
+        <div class="wf-card">
+          <div class="wf-cmd">/deep-research &lt;question&gt;</div>
+          <div class="wf-title">Deep Research</div>
+          <div class="wf-desc">Fans out parallel web searches across multiple angles, fetches and cross-checks top sources, performs adversarial claim verification, then synthesizes a cited report. Best for questions that require current information from multiple sources.</div>
+        </div>
+        <div class="wf-card">
+          <div class="wf-cmd">/code-review ultra &nbsp;·&nbsp; /ultrareview [PR]</div>
+          <div class="wf-title">Ultra Review</div>
+          <div class="wf-desc">Deep multi-agent code review in a cloud sandbox. Multiple specialized review agents examine the diff simultaneously for bugs, security issues, performance concerns, and style violations. Includes 3 free runs on Pro and Max plans.</div>
+        </div>
+        <div class="wf-card">
+          <div class="wf-cmd">/ultraplan &lt;prompt&gt;</div>
+          <div class="wf-title">Ultraplan</div>
+          <div class="wf-desc">Draft a plan in an interactive browser UI, review and edit it visually, then execute it remotely on Anthropic cloud infrastructure or send it back to your terminal. Best for large, complex changes that benefit from a planning phase.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRE-BUILT AGENT SKILLS -->
+    <section id="agent-skills">
+      <h2>Pre-built Agent Skills</h2>
+      <p>
+        Anthropic provides pre-built skills for common document workflows. These are available on
+        <strong>claude.ai</strong>, the <strong>Claude API</strong>, <strong>AWS Bedrock</strong>
+        (via Claude Platform), and <strong>Microsoft Foundry</strong>. On the API, specify
+        <code>skill_id</code> in the <code>container</code> parameter.
+      </p>
+      <div class="callout">
+        <strong>API usage requires three beta headers:</strong>
+        <code>code-execution-2025-08-25</code>, <code>skills-2025-10-02</code>, <code>files-api-2025-04-14</code>
+      </div>
+      <div class="agent-grid">
+        <div class="agent-card">
+          <div class="agent-id">pptx</div>
+          <div class="agent-desc">Create presentations, edit slides, analyze PowerPoint content. Reads and writes .pptx files.</div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-id">xlsx</div>
+          <div class="agent-desc">Create spreadsheets, analyze data, generate charts and reports. Reads and writes .xlsx files.</div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-id">docx</div>
+          <div class="agent-desc">Create Word documents, edit content, apply formatting. Reads and writes .docx files.</div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-id">pdf</div>
+          <div class="agent-desc">Generate formatted PDF documents and reports. Produces .pdf output files.</div>
+        </div>
+      </div>
+
+      <h3>Open-Source Anthropic Skills</h3>
+      <p>Anthropic also publishes open-source skills in <a href="https://github.com/anthropics/skills">github.com/anthropics/skills</a>:</p>
+      <div class="agent-grid">
+        <div class="agent-card">
+          <div class="agent-id">claude-api</div>
+          <div class="agent-desc">Up-to-date Claude API reference for 8 programming languages. Bundled with Claude Code and available separately from the skills repository.</div>
+        </div>
+      </div>
+
+      <h3>Sharing scope</h3>
+      <table class="cmd-table" style="margin-top:8px">
+        <thead><tr><th>Surface</th><th>Pre-built skills</th><th>Custom skills sharing</th></tr></thead>
+        <tbody>
+          <tr><td>claude.ai</td><td>✅ Available</td><td>Individual user only (not org-wide)</td></tr>
+          <tr><td>Claude API</td><td>✅ Available</td><td>Workspace-wide (all members)</td></tr>
+          <tr><td>Claude Code</td><td>❌ Not available</td><td>Personal or project-scoped; shareable via plugins</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  orchestra-skills v0.1.0 ·
+  <a href="https://github.com/dotts-h/claude-skills">github.com/dotts-h/claude-skills</a> ·
+  built for <a href="https://github.com/dotts-h/Copilot-sdk">my-orchestra</a>
+</footer>
+
+</body>
+</html>

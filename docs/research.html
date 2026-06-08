@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Research &amp; Roadmap — orchestra-skills docs</title>
+<meta name="description" content="Deep research: testing skill gaps (fuzz, load, chaos, visual regression), UI/UX prototyping patterns, community ecosystem, authoring best practices, and new skill recommendations." />
+<style>
+  :root {
+    --bg: #15171a; --panel: #1e2125; --panel2: #0f1113;
+    --fg: #e7e9ea; --dim: #9aa3ad; --line: #2c3036;
+    --accent: #d98c5f; --accent2: #6ea8fe; --good: #7ee787;
+    --warn: #f0a050; --bad: #f07070;
+    --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    --sidebar-w: 228px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body { background: var(--bg); color: var(--fg); font: 15px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  a { color: var(--accent2); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ── Top Nav ─────────────────────────── */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(21,23,26,.96);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    padding: 0 24px; display: flex; align-items: center; height: 52px;
+  }
+  .topnav-brand { font-weight: 600; color: var(--fg); font-size: .95rem; margin-right: auto; text-decoration: none; letter-spacing: -.01em; }
+  .topnav-brand:hover { text-decoration: none; color: var(--fg); }
+  .topnav-brand .glyph { color: var(--accent); margin-right: 6px; }
+  .topnav-links { display: flex; gap: 2px; }
+  .topnav-links a { padding: 6px 13px; border-radius: 6px; color: var(--dim); font-size: .875rem; font-weight: 500; transition: color .15s, background .15s; }
+  .topnav-links a:hover { color: var(--fg); text-decoration: none; background: rgba(255,255,255,.05); }
+  .topnav-links a.active { color: var(--fg); background: rgba(255,255,255,.08); }
+
+  /* ── Header ─────────────────────────────── */
+  header { padding: 56px 24px 40px; text-align: center; background: radial-gradient(1400px 500px at 50% -10%, #23272d, var(--bg)); border-bottom: 1px solid var(--line); }
+  header h1 { font-size: 2.6rem; letter-spacing: -.03em; margin-bottom: 10px; }
+  header h1 .glyph { color: var(--good); }
+  .tagline { color: var(--dim); font-size: 1.05rem; max-width: 680px; margin: 0 auto 22px; }
+  .badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .badge { font: 12px var(--mono); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 5px 13px; color: var(--dim); }
+
+  /* ── Page layout ─────────────────────────── */
+  .page-layout { display: grid; grid-template-columns: var(--sidebar-w) 1fr; max-width: 1280px; margin: 0 auto; padding: 0 24px; gap: 48px; align-items: start; }
+
+  /* ── Sidebar ─────────────────────────────── */
+  .sidebar { position: sticky; top: 76px; padding: 28px 0; align-self: start; max-height: calc(100vh - 100px); overflow-y: auto; }
+  .sidebar nav h4 { color: var(--dim); font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; margin: 20px 0 6px; padding: 0 10px; }
+  .sidebar nav h4:first-child { margin-top: 0; }
+  .sidebar nav a { display: block; padding: 4px 10px; color: var(--dim); border-radius: 6px; border-left: 2px solid transparent; font-size: .9rem; transition: color .15s, border-color .15s, background .15s; }
+  .sidebar nav a:hover { color: var(--fg); text-decoration: none; border-left-color: var(--accent); background: rgba(255,255,255,.03); }
+  .sidebar nav a.sub { font: 12px/1.9 var(--mono); padding: 2px 10px; }
+  .sidebar nav a.sub:hover { color: var(--accent2); }
+
+  /* ── Main content ────────────────────────── */
+  .content { padding: 32px 0 80px; min-width: 0; }
+  .content section { margin-bottom: 60px; }
+  .content h2 { font-size: 1.65rem; letter-spacing: -.02em; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+  .content h3 { font-size: .82rem; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; margin: 32px 0 12px; }
+  .content p { color: var(--dim); margin-bottom: 12px; line-height: 1.7; }
+  .content p:last-child { margin-bottom: 0; }
+  .content strong { color: var(--fg); }
+  .content ul, .content ol { color: var(--dim); padding-left: 22px; margin-bottom: 12px; }
+  .content li { margin-bottom: 5px; line-height: 1.65; }
+
+  /* ── Code ────────────────────────────────── */
+  pre { background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; overflow-x: auto; font: 13px/1.6 var(--mono); color: var(--fg); margin: 12px 0; }
+  code { font: 13px var(--mono); color: var(--good); }
+  pre code { color: inherit; font-size: inherit; }
+  .dim-t { color: var(--dim); }
+  .hl { color: var(--accent2); }
+  .acc { color: var(--accent); }
+
+  /* ── Tables ──────────────────────────────── */
+  .data-table { width: 100%; border-collapse: collapse; font-size: .875rem; margin: 8px 0 16px; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .data-table th { text-align: left; font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--dim); padding: 6px 12px; border-bottom: 1px solid var(--line); font-weight: 600; }
+  .data-table td { padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.5; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table td:first-child { font: 12px var(--mono); white-space: nowrap; }
+  .data-table td { color: var(--dim); }
+  .data-table td strong { color: var(--fg); }
+
+  /* ── Status badges ───────────────────────── */
+  .ok   { color: var(--good); font-weight: 600; }
+  .partial { color: var(--warn); font-weight: 600; }
+  .missing { color: var(--bad); font-weight: 600; }
+
+  /* ── Callout ─────────────────────────────── */
+  .callout { background: var(--panel); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 14px 0; color: var(--dim); font-size: .9rem; line-height: 1.6; }
+  .callout.blue { border-left-color: var(--accent2); }
+  .callout strong { color: var(--fg); }
+
+  /* ── Gap cards ───────────────────────────── */
+  .gap-card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; margin-bottom: 16px; overflow: hidden; }
+  .gap-header { display: flex; align-items: baseline; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+  .gap-name { font: 600 14px var(--mono); color: var(--accent); flex-shrink: 0; }
+  .gap-label { font-size: .78rem; font-weight: 600; padding: 2px 8px; border-radius: 4px; white-space: nowrap; }
+  .gap-label.high { background: rgba(240,112,112,.12); color: var(--bad); border: 1px solid rgba(240,112,112,.2); }
+  .gap-label.med  { background: rgba(240,160,80,.12);  color: var(--warn); border: 1px solid rgba(240,160,80,.2); }
+  .gap-body { padding: 14px 18px; }
+  .gap-body p { margin-bottom: 10px; }
+  .gap-body h4 { font-size: .77rem; text-transform: uppercase; letter-spacing: .07em; color: var(--dim); margin: 14px 0 6px; }
+
+  /* ── Proposal cards ──────────────────────── */
+  .proposal-card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; margin-bottom: 16px; padding: 20px; }
+  .proposal-card .prop-title { font-weight: 600; font-size: 1rem; color: var(--fg); margin-bottom: 4px; }
+  .proposal-card .prop-cmd { font: 13px var(--mono); color: var(--accent2); margin-bottom: 10px; }
+  .proposal-card .prop-desc { color: var(--dim); font-size: .9rem; line-height: 1.6; margin-bottom: 12px; }
+  .prop-files { background: var(--panel2); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; font: 12.5px/1.8 var(--mono); color: var(--dim); margin-top: 8px; overflow-x: auto; }
+  .prop-files .fn { color: var(--accent2); }
+  .prop-files .cm { color: var(--dim); }
+
+  /* ── Community table ─────────────────────── */
+  .community-card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; }
+  .community-card .repo { font: 600 13px var(--mono); color: var(--accent2); margin-bottom: 4px; }
+  .community-card .repo-desc { color: var(--dim); font-size: .875rem; line-height: 1.5; }
+
+  /* ── Best-practice grid ──────────────────── */
+  .bp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-top: 14px; }
+  .bp-card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+  .bp-card .bp-title { font-weight: 600; color: var(--fg); font-size: .95rem; margin-bottom: 6px; }
+  .bp-card .bp-body { color: var(--dim); font-size: .875rem; line-height: 1.55; }
+
+  /* ── Roadmap ─────────────────────────────── */
+  .phase { margin-bottom: 28px; }
+  .phase-label { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 4px 10px; border-radius: 6px; display: inline-block; margin-bottom: 10px; }
+  .phase-1 .phase-label { background: rgba(110,168,254,.12); color: var(--accent2); border: 1px solid rgba(110,168,254,.2); }
+  .phase-2 .phase-label { background: rgba(217,140,95,.12); color: var(--accent); border: 1px solid rgba(217,140,95,.2); }
+  .phase-3 .phase-label { background: rgba(126,231,135,.12); color: var(--good); border: 1px solid rgba(126,231,135,.2); }
+
+  /* ── Footer ──────────────────────────────── */
+  footer { text-align: center; color: var(--dim); padding: 32px; font-size: .875rem; border-top: 1px solid var(--line); }
+
+  /* ── Responsive ──────────────────────────── */
+  @media (max-width: 920px) {
+    .page-layout { grid-template-columns: 1fr; gap: 0; padding: 0 20px; }
+    .sidebar { display: none; }
+    header h1 { font-size: 2rem; }
+  }
+  @media (max-width: 600px) {
+    header { padding: 36px 16px 28px; }
+    .page-layout { padding: 0 16px; }
+    .topnav { padding: 0 16px; }
+    .topnav-links a { padding: 6px 9px; font-size: .78rem; }
+    .topnav-brand { font-size: .875rem; }
+    .bp-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="topnav-brand"><span class="glyph">◆</span> orchestra-skills</a>
+  <div class="topnav-links">
+    <a href="index.html">Plugin Skills</a>
+    <a href="claude-code.html">Claude Code</a>
+    <a href="research.html" class="active">Research</a>
+  </div>
+</nav>
+
+<header>
+  <h1><span class="glyph">⚗</span> Research &amp; Roadmap</h1>
+  <p class="tagline">Deep analysis of testing skill gaps, UI/UX prototyping patterns, community ecosystem survey, authoring best practices, and a concrete roadmap for new skills.</p>
+  <div class="badges">
+    <span class="badge">4 testing gaps</span>
+    <span class="badge">5 new skill proposals</span>
+    <span class="badge">7 community collections</span>
+    <span class="badge">3-phase roadmap</span>
+  </div>
+</header>
+
+<div class="page-layout">
+
+  <aside class="sidebar">
+    <nav>
+      <h4>Testing Gaps</h4>
+      <a href="#testing-coverage">Coverage Matrix</a>
+      <a href="#gap-fuzz" class="sub">fuzz testing</a>
+      <a href="#gap-perf" class="sub">load &amp; performance</a>
+      <a href="#gap-chaos" class="sub">chaos &amp; resilience</a>
+      <a href="#gap-visual" class="sub">visual regression</a>
+
+      <h4>UI/UX Prototyping</h4>
+      <a href="#prototyping">Current State</a>
+      <a href="#storybook">Storybook Pattern</a>
+      <a href="#spa-isolation">SPA Isolation</a>
+      <a href="#tools-comparison">Tools Comparison</a>
+
+      <h4>Community</h4>
+      <a href="#ecosystem">Ecosystem Overview</a>
+      <a href="#notable-skills">Notable Skills</a>
+      <a href="#qa-suite">24-Skill QA Suite</a>
+
+      <h4>Best Practices</h4>
+      <a href="#authoring">Authoring Principles</a>
+      <a href="#naming">Naming &amp; Descriptions</a>
+      <a href="#anti-patterns">Anti-patterns</a>
+      <a href="#composition">Composition</a>
+
+      <h4>Roadmap</h4>
+      <a href="#recommendations">New Skill Proposals</a>
+      <a href="#roadmap">Phased Roadmap</a>
+    </nav>
+  </aside>
+
+  <main class="content">
+
+    <!-- TESTING COVERAGE MATRIX -->
+    <section id="testing-coverage">
+      <h2>Testing Coverage Matrix</h2>
+      <p>
+        Orchestra-skills covers a strong baseline across the testing pyramid.
+        The matrix below identifies what's covered, what's partially addressed, and what's missing.
+      </p>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Test type</th>
+            <th>Status</th>
+            <th>Where it lives</th>
+            <th>Gap skill needed?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Unit / TDD</td><td><span class="ok">✅ Full</span></td><td><code>practicing-tdd</code></td><td>No</td></tr>
+          <tr><td>Mutation testing</td><td><span class="ok">✅ Full</span></td><td><code>hardening-tests</code> → mutation-run.sh</td><td>No</td></tr>
+          <tr><td>Flake detection</td><td><span class="ok">✅ Full</span></td><td><code>hardening-tests</code> → flake-hunt.sh</td><td>No</td></tr>
+          <tr><td>e2e (Playwright)</td><td><span class="ok">✅ Full</span></td><td><code>authoring-tests</code></td><td>No</td></tr>
+          <tr><td>API / HTTP contract</td><td><span class="ok">✅ Full</span></td><td><code>authoring-tests</code></td><td>No</td></tr>
+          <tr><td>Accessibility (a11y)</td><td><span class="ok">✅ Full</span></td><td><code>authoring-tests</code> + <code>designing-ui-ux</code></td><td>No</td></tr>
+          <tr><td>Exploratory QA</td><td><span class="ok">✅ Full</span></td><td><code>exploring-quality</code></td><td>No</td></tr>
+          <tr><td>Fuzz / property-based</td><td><span class="partial">⚠ Partial</span></td><td><code>hardening-tests</code> mentions it, no workflow</td><td><strong>fuzzing-inputs</strong></td></tr>
+          <tr><td>Load / stress</td><td><span class="partial">⚠ Partial</span></td><td>bench_test.go only, no SLO enforcement</td><td><strong>profiling-performance</strong></td></tr>
+          <tr><td>Soak / long-duration</td><td><span class="missing">❌ Missing</span></td><td>—</td><td><strong>stress-testing-resilience</strong></td></tr>
+          <tr><td>Chaos / fault injection</td><td><span class="missing">❌ Missing</span></td><td>—</td><td><strong>stress-testing-resilience</strong></td></tr>
+          <tr><td>Visual regression</td><td><span class="partial">⚠ Partial</span></td><td>screenshot-states.sh (manual, no baseline diff)</td><td>Enhancement to <strong>authoring-tests</strong></td></tr>
+          <tr><td>Consumer-driven contracts</td><td><span class="missing">❌ Future</span></td><td>—</td><td>When multi-service (Pact)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- GAP: FUZZ TESTING -->
+    <section id="gap-fuzz">
+      <h2>Gap: Fuzz Testing</h2>
+
+      <div class="gap-card">
+        <div class="gap-header">
+          <span class="gap-name">fuzzing-inputs</span>
+          <span class="gap-label high">High Priority</span>
+        </div>
+        <div class="gap-body">
+          <p>Go has had first-class corpus-driven fuzz testing since 1.18 (<code>go test -fuzz=FuzzXxx</code>). The <code>hardening-tests</code> skill mentions property/fuzz cases in <code>assertion-strength.md</code> but provides no workflow or scripts for:</p>
+          <ul>
+            <li>Identifying which functions are good fuzz targets (parsers, decoders, user-input handlers)</li>
+            <li>Scaffolding <code>func FuzzXxx(f *testing.F)</code> with seed corpus entries</li>
+            <li>Running time-boxed fuzzing in CI without blocking indefinitely</li>
+            <li>Triaging and minimizing crashing inputs</li>
+            <li>Storing corpus entries in <code>testdata/fuzz/</code> (the standard Go location, auto-replayed by <code>go test</code>)</li>
+          </ul>
+          <h4>Community context</h4>
+          <p>
+            MiniKao's 24-skill QA suite includes <strong>property-based-test-gen</strong> (Hypothesis/fast-check strategies to close coverage gaps) and <strong>mutation-testing</strong> (deliberate fault injection to find undertested logic). The ffuf-web-fuzzing community skill covers HTTP-level fuzzing. None of these are directly available here.
+          </p>
+          <h4>Proposed skill structure</h4>
+          <div class="prop-files">
+<span class="fn">skills/fuzzing-inputs/</span>
+├── <span class="fn">SKILL.md</span>
+├── references/
+│   ├── <span class="fn">fuzz-target-patterns.md</span>   <span class="cm">← what makes a good fuzz target</span>
+│   └── <span class="fn">corpus-management.md</span>       <span class="cm">← seeding, minimization, CI integration</span>
+└── scripts/
+    ├── <span class="fn">find-fuzz-targets.sh</span>        <span class="cm">← grep for fuzz-worthy functions</span>
+    └── <span class="fn">fuzz-timed.sh</span>               <span class="cm">← run fuzz for N seconds, capture crashes</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAP: PERFORMANCE -->
+    <section id="gap-perf">
+      <h2>Gap: Load &amp; Performance</h2>
+
+      <div class="gap-card">
+        <div class="gap-header">
+          <span class="gap-name">profiling-performance</span>
+          <span class="gap-label high">High Priority</span>
+        </div>
+        <div class="gap-body">
+          <p>The <code>authoring-tests</code> skill references <code>bench_test.go</code> for hot-path benchmarks, but there's no guidance on when to run performance tests, what thresholds to enforce, or how to track regression across commits. Missing:</p>
+          <ul>
+            <li>CPU and memory profiling with <code>go tool pprof</code> and flame graphs</li>
+            <li>Latency SLOs enforced in CI (fail if P95 &gt; threshold)</li>
+            <li>Benchmark comparison against stored baselines (<code>benchstat</code>)</li>
+            <li>Soak test pattern: sustained load for configurable duration, reporting allocations</li>
+            <li>HTTP-layer throughput testing (requests/sec, P99 latency)</li>
+          </ul>
+          <h4>Community context</h4>
+          <p>The alirezarezvani/claude-skills repo includes a <strong>performance-profiler</strong> skill covering Node/Python/Go profiling, bundle analysis, and load testing. The qaskills.sh ecosystem has <strong>k6-load-testing</strong> covering smoke / load / stress / soak test shapes.</p>
+          <h4>Proposed skill structure</h4>
+          <div class="prop-files">
+<span class="fn">skills/profiling-performance/</span>
+├── <span class="fn">SKILL.md</span>
+├── references/
+│   ├── <span class="fn">slo-thresholds.md</span>     <span class="cm">← P95 latency, throughput targets</span>
+│   └── <span class="fn">profiling-guide.md</span>    <span class="cm">← pprof commands, flame graph reading</span>
+└── scripts/
+    ├── <span class="fn">bench-compare.sh</span>      <span class="cm">← run bench, compare to stored baseline</span>
+    ├── <span class="fn">update-baseline.sh</span>    <span class="cm">← update after intentional improvement</span>
+    └── <span class="fn">soak-run.sh</span>           <span class="cm">← sustained load for N minutes, report allocs</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAP: CHAOS -->
+    <section id="gap-chaos">
+      <h2>Gap: Chaos &amp; Resilience</h2>
+
+      <div class="gap-card">
+        <div class="gap-header">
+          <span class="gap-name">stress-testing-resilience</span>
+          <span class="gap-label med">Medium Priority</span>
+        </div>
+        <div class="gap-body">
+          <p>No skill covers <strong>controlled failure injection</strong> — verifying the system degrades gracefully under network failures, resource exhaustion, and concurrent pressure. For this repo (Go server + SSE + browser client), relevant failure modes:</p>
+          <ul>
+            <li>Network latency injection between components (toxiproxy)</li>
+            <li>Abrupt connection drops during SSE streaming</li>
+            <li>Concurrent request floods past handler capacity</li>
+            <li>Clock skew (time.Now() injection via interface)</li>
+            <li>Slow memory leak detection under sustained load</li>
+          </ul>
+          <h4>Community context</h4>
+          <p>The <strong>jeffallan/chaos-engineer</strong> community skill is a well-designed reference. It designs experiments with Litmus Chaos (Kubernetes pod/node failure), toxiproxy (network latency/packet-loss), and Chaos Monkey (instance termination). Key safety guardrails it enforces: steady-state first, blast radius starts minimal, automated rollback within 30 seconds, single variable per experiment.</p>
+          <h4>Proposed skill structure</h4>
+          <div class="prop-files">
+<span class="fn">skills/stress-testing-resilience/</span>
+├── <span class="fn">SKILL.md</span>
+├── references/
+│   ├── <span class="fn">failure-modes.md</span>       <span class="cm">← catalog of failure scenarios for this app</span>
+│   ├── <span class="fn">steady-state.md</span>        <span class="cm">← baseline metrics to assert recovery</span>
+│   └── <span class="fn">safety-guardrails.md</span>   <span class="cm">← blast-radius rules, rollback requirements</span>
+└── scripts/
+    ├── <span class="fn">latency-inject.sh</span>      <span class="cm">← toxiproxy setup + teardown</span>
+    ├── <span class="fn">connection-flood.sh</span>    <span class="cm">← concurrent HTTP + SSE pressure</span>
+    └── <span class="fn">goroutine-check.sh</span>     <span class="cm">← assert goroutine count returns to baseline</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAP: VISUAL REGRESSION -->
+    <section id="gap-visual">
+      <h2>Gap: Visual Regression</h2>
+
+      <div class="gap-card">
+        <div class="gap-header">
+          <span class="gap-name">authoring-tests enhancement</span>
+          <span class="gap-label high">High Priority (low effort)</span>
+        </div>
+        <div class="gap-body">
+          <p>The <code>designing-ui-ux</code> skill runs <code>screenshot-states.sh</code> for before/after evidence, but there's no <strong>baseline + automated diff</strong> workflow that can fail CI on unexpected visual regression. Playwright has this built in — no external service needed:</p>
+          <pre>// e2e/tests/visual.spec.ts
+test('dashboard looks correct', async ({ page }) => {
+  await page.goto('/dashboard');
+  await expect(page).toHaveScreenshot('dashboard.png');
+});</pre>
+          <ul>
+            <li>First run creates baseline screenshots in <code>e2e/tests/snapshots/</code></li>
+            <li>Subsequent runs diff pixel-by-pixel against baseline; CI fails on unexpected change</li>
+            <li>Update baselines: <code>npx playwright test --update-snapshots</code></li>
+            <li>Per-state coverage: idle, streaming, error, responsive widths</li>
+          </ul>
+          <h4>Community context</h4>
+          <p>MiniKao's QA suite includes <strong>visual-regression-gen</strong>. The qaskills.sh collection has <strong>visual-regression-percy-chromatic</strong>. Both confirm this is a standard QA layer that teams need — it just doesn't require an external service when using Playwright's built-in support.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- UI/UX PROTOTYPING -->
+    <section id="prototyping">
+      <h2>UI/UX Prototyping: Current State</h2>
+      <p>
+        The <code>designing-ui-ux</code> skill is a <strong>production-first design loop</strong> — it audits,
+        designs, implements, and verifies in the real app. This is the right scope for a production htmx app.
+      </p>
+      <p>
+        <strong>Prototyping</strong> is different: it explores and communicates ideas <em>before</em> committing to
+        production code. Goals are speed (3 layouts in an hour), isolation (test a component without the full app),
+        and stakeholder communication (interactive mockups without backend).
+      </p>
+      <div class="callout">
+        <strong>What's missing:</strong> A rapid prototyping phase where Claude generates a static HTML mockup
+        using the existing design tokens, serves it locally, and produces stakeholder-share screenshots — all
+        before touching production templates. This should be added as a <code>## Rapid prototyping</code> section
+        to <code>designing-ui-ux</code>.
+      </div>
+
+      <h3>Proposed rapid prototyping workflow</h3>
+      <ol>
+        <li>Read <code>docs/DESIGN.md</code> and <code>app.css</code> for current tokens and palette</li>
+        <li>Generate standalone HTML mockup in <code>docs/prototypes/YYYY-MM-DD-feature/index.html</code></li>
+        <li>Serve: <code>python3 -m http.server 9999 --directory docs/prototypes/</code></li>
+        <li>Run <code>screenshot-states.sh</code> to capture stakeholder-share images</li>
+        <li>Iterate on feedback <em>before</em> touching production templates</li>
+        <li>When approved: port styles and structure to htmx templates</li>
+      </ol>
+    </section>
+
+    <!-- STORYBOOK PATTERN -->
+    <section id="storybook">
+      <h2>The Storybook + Claude Pattern</h2>
+      <p>
+        For JavaScript/React/Vue/Angular frontends (not this htmx repo specifically, but worth documenting
+        for future stacks), the strongest 2026 pattern for UI prototyping is <strong>Storybook + Claude Code</strong>
+        rather than external tools.
+      </p>
+      <h3>Why Storybook over Lovable / v0.dev / bolt.new</h3>
+      <ul>
+        <li>Prototypes live in the codebase — CI/CD catches regressions automatically</li>
+        <li>Uses real production components — no handoff gap between prototype and production</li>
+        <li>CLAUDE.md documents the design system; Claude always uses real tokens</li>
+        <li><code>@storybook/addon-mcp</code> exposes <code>list_components</code>, <code>get_component_props</code>, <code>get_component_source</code> as MCP tools</li>
+      </ul>
+      <h3>The workflow</h3>
+      <ol>
+        <li>Install <code>@storybook/addon-mcp</code> — exposes component metadata to Claude as tools</li>
+        <li>Claude queries your component library: <code>list_components</code>, <code>get_component_source</code></li>
+        <li>Claude writes a Story (<code>ComponentName.stories.ts</code>) with mock data and interaction tests</li>
+        <li>Visual regression testing runs automatically on each story via Playwright</li>
+        <li>Stakeholders view the deployed Storybook (Chromatic / self-hosted) for interactive review</li>
+        <li>When approved: Claude ports the Story's component usage directly to production routes</li>
+      </ol>
+      <div class="callout blue">
+        <strong>flight505/storybook-assistant</strong> provides a ready-made Claude Code plugin with 18 skills, 12 slash commands, and 3 agents for this workflow — supporting React, Vue, Angular, Next.js, Svelte, Solid, and Tauri.
+      </div>
+    </section>
+
+    <!-- SPA ISOLATION -->
+    <section id="spa-isolation">
+      <h2>SPA Module Isolation Pattern</h2>
+      <p>For SPAs, prototyping a new route or module in isolation before wiring it into the router:</p>
+      <ol>
+        <li>Create <code>src/prototypes/feature-name/</code> with a standalone React root (or similar)</li>
+        <li>Wire up Mock Service Worker (MSW) to intercept API calls with realistic fixture data</li>
+        <li>Use an in-memory router for multi-step flows (wizard, tabs, breadcrumb navigation)</li>
+        <li>Import design tokens from the same source as production</li>
+        <li>When approved: promote to <code>src/routes/feature/</code>, remove MSW stubs</li>
+      </ol>
+      <p>This lets Claude Code generate an entire interactive module prototype in a single session, with the user providing feedback on the live prototype before any production routing is touched.</p>
+    </section>
+
+    <!-- TOOLS COMPARISON -->
+    <section id="tools-comparison">
+      <h2>Tools Comparison</h2>
+      <table class="data-table">
+        <thead><tr><th>Approach</th><th>Tools</th><th>Best for</th><th>Main tradeoff</th></tr></thead>
+        <tbody>
+          <tr><td>External AI prototyping</td><td>v0.dev, Lovable, bolt.new</td><td>Greenfield exploration, throwaway mockups</td><td>Disconnected from real codebase; handoff gap</td></tr>
+          <tr><td>Storybook + Claude Code</td><td>@storybook/addon-mcp + Claude</td><td>Component-first teams with design systems</td><td>Setup overhead; excellent long-term</td></tr>
+          <tr><td>Design tool bridge</td><td>Figma → Code Connect → Claude</td><td>Teams with dedicated designers and Figma</td><td>Requires Figma; preserves design intent well</td></tr>
+          <tr><td>UXPin Merge + Claude</td><td>UXPin + Claude API</td><td>Established design systems, enterprise</td><td>Paid tool; best for mature DS</td></tr>
+          <tr><td>Static HTML prototypes (this repo)</td><td>Claude + app.css tokens</td><td>Server-rendered htmx apps</td><td>No interactivity; excellent for layout review</td></tr>
+        </tbody>
+      </table>
+      <p>The 2026 consensus: <strong>prototypes should live in the codebase</strong>. External tools create a handoff gap that costs more engineering time than the initial speed gain.</p>
+    </section>
+
+    <!-- ECOSYSTEM OVERVIEW -->
+    <section id="ecosystem">
+      <h2>Community Ecosystem</h2>
+      <p>
+        As of 2026, Claude Code skills follow the <a href="https://agentskills.io">Agent Skills open standard</a>,
+        meaning skills written here also work (with minor adjustments) in Cursor, Gemini CLI, Codex CLI, and
+        Antigravity IDE. Multiple "awesome" collections have emerged:
+      </p>
+
+      <div class="community-card">
+        <div class="repo"><a href="https://github.com/travisvn/awesome-claude-skills">travisvn/awesome-claude-skills</a></div>
+        <div class="repo-desc">Best curated starting point. Quality-filtered list of skills, resources, and tools for Claude Code workflows.</div>
+      </div>
+      <div class="community-card">
+        <div class="repo"><a href="https://github.com/hesreallyhim/awesome-claude-code">hesreallyhim/awesome-claude-code</a></div>
+        <div class="repo-desc">Most comprehensive list: skills, agents, hooks, orchestrators, status lines, developer tooling, and all latest features. Currently being restructured.</div>
+      </div>
+      <div class="community-card">
+        <div class="repo"><a href="https://github.com/rohitg00/awesome-claude-code-toolkit">rohitg00/awesome-claude-code-toolkit</a></div>
+        <div class="repo-desc">135 agents, 35 curated skills, 42 commands, 176+ plugins, 20 hooks, 15 rules, 7 templates, 14 MCP configs, 26 companion apps. The most batteries-included toolkit.</div>
+      </div>
+      <div class="community-card">
+        <div class="repo"><a href="https://github.com/alirezarezvani/claude-skills">alirezarezvani/claude-skills</a></div>
+        <div class="repo-desc">337+ production-ready skills across 16 domains for 13 AI platforms. Strong on engineering, compliance (ISO/SOC 2/GDPR), C-suite personas, and security-first architecture.</div>
+      </div>
+      <div class="community-card">
+        <div class="repo"><a href="https://github.com/VoltAgent/awesome-agent-skills">VoltAgent/awesome-agent-skills</a></div>
+        <div class="repo-desc">1 000+ community agent skills from official dev teams and community contributors, compatible across coding agents.</div>
+      </div>
+      <div class="community-card">
+        <div class="repo"><a href="https://github.com/sickn33/antigravity-awesome-skills">sickn33/antigravity-awesome-skills</a></div>
+        <div class="repo-desc">1 500+ installable skills with a CLI installer, bundles, workflows, and official/community collections. Multi-platform.</div>
+      </div>
+    </section>
+
+    <!-- NOTABLE SKILLS -->
+    <section id="notable-skills">
+      <h2>Notable Community Skills</h2>
+      <table class="data-table">
+        <thead><tr><th>Skill</th><th>What it does</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>obra/superpowers</td><td>20+ battle-tested utilities: TDD, debugging, collaboration. Commands like /brainstorm, /write-plan</td><td>travisvn list</td></tr>
+          <tr><td>Trail of Bits security</td><td>Static analysis, variant analysis, code auditing, vulnerability detection</td><td>travisvn list</td></tr>
+          <tr><td>chaos-engineer</td><td>Designs chaos experiments with Litmus Chaos, toxiproxy, Chaos Monkey; outputs manifests, runbooks, post-mortem templates</td><td>jeffallan</td></tr>
+          <tr><td>playwright-skill</td><td>Full Playwright browser automation framework with Claude Code integration</td><td>community</td></tr>
+          <tr><td>ffuf-web-fuzzing</td><td>HTTP-level penetration testing with authenticated request handling</td><td>community</td></tr>
+          <tr><td>storybook-assistant</td><td>18 skills, 12 slash commands, 3 agents for Storybook+Claude workflow; visual regression, a11y, design system integration</td><td>flight505</td></tr>
+          <tr><td>skill-creator</td><td>Anthropic meta-skill — builds new skills through interactive Q&amp;A with eval-driven optimization and trigger testing</td><td>Anthropic</td></tr>
+          <tr><td>loki-mode</td><td>Orchestrates 37 AI agents across 6 swarms for autonomous multi-domain work</td><td>community</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 24-SKILL QA SUITE -->
+    <section id="qa-suite">
+      <h2>Reference: The 24-Skill QA Suite</h2>
+      <p>
+        MiniKao's open-source QA toolkit (2026) is the most complete community testing skill collection.
+        Organized into 8 categories, with three operation modes (full-MCP, partial-MCP, markdown-only):
+      </p>
+      <table class="data-table">
+        <thead><tr><th>Category</th><th>Skills</th></tr></thead>
+        <tbody>
+          <tr><td>Test Design</td><td>test-master, flutter-test-master, test-review, regression-test, speckit-to-tc, tc-version-diff, sheet-md-sync, smoke-test-analyzer</td></tr>
+          <tr><td>Automation</td><td>test-automation, flutter-test-automation, tc-to-pytest</td></tr>
+          <tr><td>Bug Management</td><td>bug-report (RIDER format, JIRA dup check, git blame root cause, Slack notify)</td></tr>
+          <tr><td>Quality Quantification</td><td><strong>mutation-testing</strong> (mutmut), <strong>property-based-test-gen</strong> (Hypothesis/fast-check)</td></tr>
+          <tr><td>Reporting</td><td>publish-regression</td></tr>
+          <tr><td>Performance &amp; Security</td><td><strong>performance-test-gen</strong>, security-scan, <strong>api-contract-test</strong></td></tr>
+          <tr><td>CI Health</td><td><strong>visual-regression-gen</strong>, <strong>flaky-test-hunter</strong></td></tr>
+          <tr><td>Quality Specialties</td><td><strong>a11y-audit</strong>, localization-test, push-notification-test, <strong>test-data-factory</strong></td></tr>
+        </tbody>
+      </table>
+      <p><em>Bold entries are skills that address gaps not yet covered in orchestra-skills.</em></p>
+    </section>
+
+    <!-- AUTHORING BEST PRACTICES -->
+    <section id="authoring">
+      <h2>Authoring Best Practices</h2>
+      <div class="bp-grid">
+        <div class="bp-card">
+          <div class="bp-title">Concise is key</div>
+          <div class="bp-body">Claude is already smart. Only add context Claude doesn't already have. Challenge every paragraph: "Does Claude need this explanation?" The context window is shared with conversation history, other skills, and system prompts.</div>
+        </div>
+        <div class="bp-card">
+          <div class="bp-title">Degrees of freedom</div>
+          <div class="bp-body"><strong>High freedom</strong> (text instructions): multiple valid approaches. <strong>Medium freedom</strong> (pseudocode): preferred pattern with variation. <strong>Low freedom</strong> (exact script): fragile, exact sequence required. Match specificity to task fragility.</div>
+        </div>
+        <div class="bp-card">
+          <div class="bp-title">Evaluations first</div>
+          <div class="bp-body">Write 3 test scenarios BEFORE writing the skill body. This ensures you're solving real problems, not imagined ones. Baseline Claude's performance without the skill, then measure improvement.</div>
+        </div>
+        <div class="bp-card">
+          <div class="bp-title">Test with all models</div>
+          <div class="bp-body">Skills are model-dependent. Haiku needs more detail; Opus needs less verbosity. Test with Haiku (does it provide enough guidance?), Sonnet (is it clear and efficient?), and Opus (does it over-explain?).</div>
+        </div>
+        <div class="bp-card">
+          <div class="bp-title">Progressive disclosure</div>
+          <div class="bp-body">SKILL.md body under 500 lines. Split content into separate reference files when approaching this limit. Keep all reference links one level deep from SKILL.md — never chain references deeper.</div>
+        </div>
+        <div class="bp-card">
+          <div class="bp-title">Feedback loops</div>
+          <div class="bp-body">For validation-heavy skills: run validator → fix errors → repeat. The plan-validate-execute pattern catches errors before irreversible changes. Scripts should surface errors with specific messages, not generic failures.</div>
+        </div>
+        <div class="bp-card">
+          <div class="bp-title">Scripts execute, not load</div>
+          <div class="bp-body">Scripts in <code>scripts/</code> are run via bash — their code never enters the context window. Only their output costs tokens. This makes scripts far more efficient than asking Claude to generate equivalent code.</div>
+        </div>
+        <div class="bp-card">
+          <div class="bp-title">Develop with Claude</div>
+          <div class="bp-body">Use Claude A to write the skill, Claude B (fresh instance) to test it on real tasks. Observe where Claude B struggles or misses rules, then return to Claude A with specific observations. The iterative cycle beats writing from assumptions.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NAMING & DESCRIPTIONS -->
+    <section id="naming">
+      <h2>Naming &amp; Descriptions</h2>
+
+      <h3>Name field</h3>
+      <table class="data-table">
+        <thead><tr><th>Pattern</th><th>Example</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td>Gerund form (recommended)</td><td>processing-pdfs, hardening-tests</td><td><span class="ok">✅ Best</span></td></tr>
+          <tr><td>Noun phrase</td><td>pdf-processing, test-hardening</td><td><span class="ok">✅ Good</span></td></tr>
+          <tr><td>Action verb</td><td>process-pdfs, harden-tests</td><td><span class="ok">✅ Good</span></td></tr>
+          <tr><td>Too vague</td><td>helper, utils, tools</td><td><span class="missing">❌ Avoid</span></td></tr>
+          <tr><td>Reserved word</td><td>anthropic-helper, claude-tools</td><td><span class="missing">❌ Invalid</span></td></tr>
+          <tr><td>Uppercase / spaces</td><td>Process PDFs</td><td><span class="missing">❌ Invalid</span></td></tr>
+        </tbody>
+      </table>
+
+      <h3>Description field — the most critical part</h3>
+      <p>
+        Claude uses the description to pick the right skill from potentially 100+ available.
+        It must answer: <em>what does it do</em> AND <em>when should I use it</em>.
+        Formula: <strong>[Action verb] [what] — Use when [trigger conditions]</strong>.
+      </p>
+      <pre><span class="acc">✅ Good:</span>
+description: >
+  Extracts text and tables from PDF files, fills forms, merges documents.
+  Use when working with PDF files or when the user mentions PDFs, forms,
+  or document extraction.
+
+<span class="bad">❌ Bad:</span>
+description: Helps with documents</pre>
+      <ul>
+        <li>Always write in <strong>third person</strong> (injected into system prompt)</li>
+        <li>Max 1 024 characters; no XML tags; no reserved words</li>
+        <li>Include at least 2–3 specific trigger terms users might type</li>
+      </ul>
+    </section>
+
+    <!-- ANTI-PATTERNS -->
+    <section id="anti-patterns">
+      <h2>Anti-patterns to Avoid</h2>
+      <table class="data-table">
+        <thead><tr><th>Anti-pattern</th><th>Problem</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td>Too many options</td><td>Paralyzes Claude with analysis paralysis</td><td>Provide one default; name the escape hatch explicitly</td></tr>
+          <tr><td>Punting errors to Claude</td><td>Unreliable; Claude can't recover what a script swallowed</td><td>Handle error conditions explicitly in scripts</td></tr>
+          <tr><td>Windows-style paths (<code>\</code>)</td><td>Breaks on Unix — where most CI runs</td><td>Always use forward slashes</td></tr>
+          <tr><td>Voodoo constants</td><td>TIMEOUT=47 — nobody knows why</td><td>Brief inline justification for every non-obvious value</td></tr>
+          <tr><td>Deeply nested references</td><td>Claude may partially read chained files</td><td>All references link one level deep from SKILL.md</td></tr>
+          <tr><td>Time-sensitive information</td><td>"If before Aug 2025…" — rots immediately</td><td>Use "old patterns" sections with &lt;details&gt; collapse</td></tr>
+          <tr><td>Inconsistent terminology</td><td>Same concept named 3 ways → confuses Claude</td><td>Pick one term and use it throughout the skill</td></tr>
+          <tr><td>No evaluation before authoring</td><td>Skill solves imagined problems</td><td>Run Claude on representative tasks first; document failures</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- COMPOSITION -->
+    <section id="composition">
+      <h2>Skill Composition Patterns</h2>
+      <p>
+        Skills compose by having explicit <strong>boundary rules</strong> — each skill states what it does
+        <em>and what it defers to other skills</em>. This prevents overlap and ensures Claude routes to the right specialist.
+      </p>
+      <p>Orchestra-skills demonstrates this well:</p>
+      <pre><span class="acc">auditing-code-quality</span> boundaries:
+  Bugs / correctness         → /code-review (built-in)
+  Mechanical simplification  → /simplify (built-in)
+  Module structure           → improving-architecture
+  Test quality               → hardening-tests
+
+<span class="acc">hardening-tests</span> boundaries:
+  Creates tests              → practicing-tdd, authoring-tests
+  Attacks &amp; strengthens them → this skill
+  Product bugs found         → file via tracking system, fix with TDD
+
+<span class="acc">exploring-quality</span> boundaries:
+  Finds problems             → this skill
+  Locks in a11y/visual fixes → authoring-tests
+  Schedules filed bugs       → tracking issues</pre>
+      <div class="callout">
+        <strong>Document boundaries explicitly.</strong>
+        Every skill should answer "what do I NOT do?" as clearly as "what do I do?".
+        This is what allows skills to be composed without stepping on each other.
+      </div>
+    </section>
+
+    <!-- RECOMMENDATIONS -->
+    <section id="recommendations">
+      <h2>Recommended New Skills</h2>
+
+      <div class="proposal-card">
+        <div class="prop-title">profiling-performance</div>
+        <div class="prop-cmd">Invocation: /profiling-performance</div>
+        <div class="prop-desc">
+          Systematically profile Go performance, detect regressions against stored baselines, enforce P95 latency SLOs in CI, and run soak tests for leak detection.
+          Fills the gap between "we have bench_test.go" and "we fail CI when P95 degrades."
+        </div>
+        <div class="prop-files">
+<span class="fn">skills/profiling-performance/</span>
+├── <span class="fn">SKILL.md</span>
+├── references/
+│   ├── <span class="fn">slo-thresholds.md</span>
+│   └── <span class="fn">profiling-guide.md</span>
+└── scripts/
+    ├── <span class="fn">bench-compare.sh</span>      <span class="cm">← benchstat diff vs baseline</span>
+    ├── <span class="fn">update-baseline.sh</span>
+    └── <span class="fn">soak-run.sh</span></div>
+      </div>
+
+      <div class="proposal-card">
+        <div class="prop-title">fuzzing-inputs</div>
+        <div class="prop-cmd">Invocation: /fuzzing-inputs</div>
+        <div class="prop-desc">
+          Scaffold and run Go corpus-driven fuzz tests for parsers, decoders, and user-input handlers.
+          Identifies fuzz targets, writes <code>func FuzzXxx(f *testing.F)</code> with seed corpus, runs
+          time-boxed fuzzing in CI, and stores crash-reproducing corpus entries.
+        </div>
+        <div class="prop-files">
+<span class="fn">skills/fuzzing-inputs/</span>
+├── <span class="fn">SKILL.md</span>
+├── references/
+│   ├── <span class="fn">fuzz-target-patterns.md</span>
+│   └── <span class="fn">corpus-management.md</span>
+└── scripts/
+    ├── <span class="fn">find-fuzz-targets.sh</span>
+    └── <span class="fn">fuzz-timed.sh</span>            <span class="cm">← run for N seconds, capture crashes</span></div>
+      </div>
+
+      <div class="proposal-card">
+        <div class="prop-title">stress-testing-resilience</div>
+        <div class="prop-cmd">Invocation: /stress-testing-resilience</div>
+        <div class="prop-desc">
+          Verify the system degrades gracefully under failure and load. Maps failure modes from
+          CODEBASE_MAP.md, runs controlled fault injection (toxiproxy latency, connection floods),
+          asserts steady-state recovery within SLO, and produces a resilience report.
+        </div>
+        <div class="prop-files">
+<span class="fn">skills/stress-testing-resilience/</span>
+├── <span class="fn">SKILL.md</span>
+├── references/
+│   ├── <span class="fn">failure-modes.md</span>
+│   ├── <span class="fn">steady-state.md</span>
+│   └── <span class="fn">safety-guardrails.md</span>   <span class="cm">← blast-radius rules</span>
+└── scripts/
+    ├── <span class="fn">latency-inject.sh</span>
+    ├── <span class="fn">connection-flood.sh</span>
+    └── <span class="fn">goroutine-check.sh</span></div>
+      </div>
+
+      <div class="proposal-card">
+        <div class="prop-title">Enhancement: authoring-tests → visual regression</div>
+        <div class="prop-cmd">Add ## Visual regression tests section to authoring-tests SKILL.md</div>
+        <div class="prop-desc">
+          Add Playwright's built-in screenshot comparison to the test layers — zero external dependencies,
+          CI-enforceable, per-state coverage. Update the layer matrix to include visual as a fifth layer.
+          No new skill needed; this is a targeted enhancement.
+        </div>
+      </div>
+
+      <div class="proposal-card">
+        <div class="prop-title">Enhancement: designing-ui-ux → rapid prototyping phase</div>
+        <div class="prop-cmd">Add ## Rapid prototyping section to designing-ui-ux SKILL.md</div>
+        <div class="prop-desc">
+          Add Phase 0 before the Audit → Design → Implement loop. Claude generates a standalone HTML
+          mockup using existing design tokens, serves it locally, captures stakeholder-share screenshots,
+          and iterates — all before touching production templates.
+        </div>
+      </div>
+    </section>
+
+    <!-- ROADMAP -->
+    <section id="roadmap">
+      <h2>Phased Roadmap</h2>
+
+      <div class="phase phase-1">
+        <span class="phase-label">Phase 1 — Q3 2026: Fill Critical Gaps</span>
+        <table class="data-table">
+          <thead><tr><th>Item</th><th>Type</th><th>Effort</th><th>Impact</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Visual regression in authoring-tests</strong></td><td>Enhancement</td><td>Small</td><td>High — zero-dependency, immediate CI value</td></tr>
+            <tr><td><strong>Rapid prototyping in designing-ui-ux</strong></td><td>Enhancement</td><td>Small</td><td>High — faster design iteration</td></tr>
+            <tr><td><strong>fuzzing-inputs skill</strong></td><td>New skill</td><td>Medium</td><td>High — Go 1.18+ fuzz is first-class and currently untapped</td></tr>
+            <tr><td><strong>profiling-performance skill</strong></td><td>New skill</td><td>Medium</td><td>High — no current perf regression detection</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="phase phase-2">
+        <span class="phase-label">Phase 2 — Q4 2026: Stability & Resilience</span>
+        <table class="data-table">
+          <thead><tr><th>Item</th><th>Type</th><th>Effort</th><th>Impact</th></tr></thead>
+          <tbody>
+            <tr><td><strong>stress-testing-resilience skill</strong></td><td>New skill</td><td>Large</td><td>Medium-High — important pre-release gate</td></tr>
+            <tr><td><strong>Soak test pattern in profiling-performance</strong></td><td>Enhancement</td><td>Small</td><td>Medium — catches slow memory leaks</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="phase phase-3">
+        <span class="phase-label">Phase 3 — Q1 2027: Ecosystem Integration</span>
+        <table class="data-table">
+          <thead><tr><th>Item</th><th>Type</th><th>Effort</th><th>Impact</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Storybook MCP integration in designing-ui-ux</strong></td><td>Enhancement</td><td>Medium</td><td>Medium — relevant if frontend stack changes</td></tr>
+            <tr><td><strong>Consumer-contract testing in registering-contracts</strong></td><td>New skill</td><td>Large</td><td>Low now, critical if multi-service</td></tr>
+            <tr><td><strong>Publish to Agent Skills open standard registry</strong></td><td>Distribution</td><td>Small</td><td>High — community discoverability</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Skill count projection</h3>
+      <table class="data-table">
+        <thead><tr><th>Phase</th><th>Skills</th><th>Change</th></tr></thead>
+        <tbody>
+          <tr><td>Today</td><td>13</td><td>—</td></tr>
+          <tr><td>Phase 1 complete</td><td>15</td><td>+2 new skills, 2 enhancements</td></tr>
+          <tr><td>Phase 2 complete</td><td>16</td><td>+1 new skill, 1 enhancement</td></tr>
+          <tr><td>Phase 3 complete</td><td>18</td><td>+2 integrations</td></tr>
+        </tbody>
+      </table>
+
+      <h3>External resources</h3>
+      <ul>
+        <li><a href="https://code.claude.com/docs/en/skills">Claude Code Skills Documentation</a> — official reference</li>
+        <li><a href="https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices">Agent Skills Best Practices</a> — official authoring guide</li>
+        <li><a href="https://code.claude.com/docs/en/commands">Claude Code Commands Reference</a> — full command table</li>
+        <li><a href="https://github.com/travisvn/awesome-claude-skills">travisvn/awesome-claude-skills</a> — curated community list</li>
+        <li><a href="https://github.com/hesreallyhim/awesome-claude-code">hesreallyhim/awesome-claude-code</a> — comprehensive list</li>
+        <li><a href="https://github.com/rohitg00/awesome-claude-code-toolkit">rohitg00/awesome-claude-code-toolkit</a> — 135 agents + toolkit</li>
+        <li><a href="https://github.com/flight505/storybook-assistant">flight505/storybook-assistant</a> — Storybook + Claude Code</li>
+        <li><a href="https://jeffallan.github.io/claude-skills/skills/devops/chaos-engineer/">jeffallan chaos-engineer skill</a> — chaos engineering reference</li>
+        <li><a href="https://agentskills.io">agentskills.io</a> — open standard for cross-platform skills</li>
+      </ul>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  orchestra-skills v0.1.0 ·
+  <a href="https://github.com/dotts-h/claude-skills">github.com/dotts-h/claude-skills</a> ·
+  built for <a href="https://github.com/dotts-h/Copilot-sdk">my-orchestra</a>
+</footer>
+
+</body>
+</html>
