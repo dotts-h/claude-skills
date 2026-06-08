@@ -20,7 +20,7 @@
     --sidebar-w: 228px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
   body {
     background: var(--bg);
     color: var(--fg);
@@ -98,7 +98,7 @@
   .sidebar nav a.skill-link:hover { color: var(--accent2); }
 
   /* ── Main content ────────────────────────── */
-  .content { padding: 32px 0 80px; }
+  .content { padding: 32px 0 80px; min-width: 0; }
   .content section { margin-bottom: 60px; }
   .content h2 {
     font-size: 1.65rem;
@@ -125,9 +125,12 @@
     border-radius: 10px;
     padding: 16px 18px;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     font: 13px/1.6 var(--mono);
     color: var(--fg);
     margin: 12px 0;
+    max-width: 100%;
+    width: 100%;
   }
   code { font: 13px var(--mono); color: var(--good); }
   pre code { color: inherit; font-size: inherit; }
@@ -315,7 +318,6 @@
 
   /* ── Responsive ──────────────────────────── */
   @media (max-width: 920px) {
-    body { overflow-x: hidden; }
     .page-layout { grid-template-columns: 1fr; gap: 0; padding: 0 20px; }
     .sidebar { display: none; }
     header h1 { font-size: 2.1rem; }
@@ -515,18 +517,18 @@
       <h3>Repository layout</h3>
 <pre><span class="dim">dotts-h/claude-skills/</span>
 ├── <span class="hl">.claude-plugin/</span>
-│   └── marketplace.json          <span class="dim"># marketplace catalog — registers the plugin</span>
+│   └── marketplace.json    <span class="dim"># catalog — registers the plugin</span>
 ├── <span class="hl">plugins/orchestra-skills/</span>
 │   ├── .claude-plugin/
-│   │   └── plugin.json           <span class="dim"># plugin manifest (name, version, author)</span>
+│   │   └── plugin.json     <span class="dim"># manifest (name, version, author)</span>
 │   └── skills/
-│       ├── <span class="acc">recording-decisions/</span>  <span class="dim"># one directory per skill</span>
-│       │   ├── SKILL.md          <span class="dim"># frontmatter + description + workflow + rules</span>
-│       │   ├── references/       <span class="dim"># pattern guides and templates (1–5 files)</span>
-│       │   └── scripts/          <span class="dim"># bash helpers (1–4 scripts)</span>
+│       ├── <span class="acc">recording-decisions/</span>
+│       │   ├── SKILL.md    <span class="dim"># frontmatter + workflow + rules</span>
+│       │   ├── references/ <span class="dim"># guides &amp; templates (1–5 files)</span>
+│       │   └── scripts/    <span class="dim"># bash helpers (1–4 scripts)</span>
 │       └── … (13 skills total)
 ├── <span class="hl">docs/</span>
-│   ├── index.html                <span class="dim"># this page (served via GitHub Pages)</span>
+│   ├── index.html          <span class="dim"># GitHub Pages site</span>
 │   └── .nojekyll
 └── README.md</pre>
 
