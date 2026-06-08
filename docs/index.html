@@ -392,9 +392,47 @@
   @media (max-width: 380px) {
     .mobile-toc .toc-body { grid-template-columns: 1fr; }
   }
+
+  /* ── Top Nav ─────────────────────────── */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(21,23,26,.96);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    padding: 0 24px;
+    display: flex; align-items: center; height: 52px;
+  }
+  .topnav-brand {
+    font-weight: 600; color: var(--fg); font-size: .95rem;
+    margin-right: auto; text-decoration: none; letter-spacing: -.01em;
+  }
+  .topnav-brand:hover { text-decoration: none; color: var(--fg); }
+  .topnav-brand .glyph { color: var(--accent); margin-right: 6px; }
+  .topnav-links { display: flex; gap: 2px; }
+  .topnav-links a {
+    padding: 6px 13px; border-radius: 6px; color: var(--dim);
+    font-size: .875rem; font-weight: 500;
+    transition: color .15s, background .15s;
+  }
+  .topnav-links a:hover { color: var(--fg); text-decoration: none; background: rgba(255,255,255,.05); }
+  .topnav-links a.active { color: var(--fg); background: rgba(255,255,255,.08); }
+  @media (max-width: 600px) {
+    .topnav { padding: 0 16px; }
+    .topnav-links a { padding: 6px 9px; font-size: .78rem; }
+    .topnav-brand { font-size: .875rem; }
+  }
 </style>
 </head>
 <body>
+
+<nav class="topnav">
+  <a href="index.html" class="topnav-brand"><span class="glyph">◆</span> orchestra-skills</a>
+  <div class="topnav-links">
+    <a href="index.html" class="active">Plugin Skills</a>
+    <a href="claude-code.html">Claude Code</a>
+    <a href="research.html">Research</a>
+  </div>
+</nav>
 
 <header>
   <h1><span class="glyph">◆</span> orchestra-skills</h1>
