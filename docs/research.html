@@ -183,6 +183,7 @@
       <a href="#gap-perf" class="sub">load &amp; performance</a>
       <a href="#gap-chaos" class="sub">chaos &amp; resilience</a>
       <a href="#gap-visual" class="sub">visual regression</a>
+      <a href="#gap-security" class="sub">security</a>
 
       <h4>UI/UX Prototyping</h4>
       <a href="#prototyping">Current State</a>
@@ -374,6 +375,41 @@ test('dashboard looks correct', async ({ page }) => {
           </ul>
           <h4>Community context</h4>
           <p>MiniKao's QA suite includes <strong>visual-regression-gen</strong>. The qaskills.sh collection has <strong>visual-regression-percy-chromatic</strong>. Both confirm this is a standard QA layer that teams need — it just doesn't require an external service when using Playwright's built-in support.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAP: SECURITY -->
+    <section id="gap-security">
+      <h2>Gap: Security</h2>
+
+      <div class="gap-card">
+        <div class="gap-header">
+          <span class="gap-name">security-reviewing skill (missing)</span>
+          <span class="gap-label high">High Priority</span>
+        </div>
+        <div class="gap-body">
+          <p>Orchestra-skills has no dedicated security skill. The built-in <code>/security-review</code> command is generic — it doesn't know the project's architecture, Go idioms, or the threat surface specific to this codebase. Four distinct security concerns are currently unaddressed:</p>
+          <table class="data-table" style="margin:16px 0">
+            <thead><tr><th>Area</th><th>Current state</th><th>Gap</th></tr></thead>
+            <tbody>
+              <tr><td>Secrets / credentials</td><td class="partial">Ad-hoc</td><td>No systematic scan before commit or in CI</td></tr>
+              <tr><td>Dependency vulnerabilities</td><td class="missing">None</td><td>No <code>govulncheck</code> / <code>go list -m</code> audit skill</td></tr>
+              <tr><td>SAST / code patterns</td><td class="partial">Partial</td><td>auditing-code-quality checks idioms, not security patterns (injection, SSRF, path traversal)</td></tr>
+              <tr><td>Threat modelling</td><td class="missing">None</td><td>No structured threat-model doc or review step tied to architecture changes</td></tr>
+            </tbody>
+          </table>
+          <h4>What a dedicated skill would do</h4>
+          <ul>
+            <li>Run <code>govulncheck ./...</code> and surface CVEs with fix guidance</li>
+            <li>Run <code>gosec ./...</code> (or <code>staticcheck</code> security rules) for SAST findings</li>
+            <li>Scan for hardcoded secrets / credentials using pattern rules</li>
+            <li>Walk the OWASP Top 10 checklist against the active codebase</li>
+            <li>Produce a ranked findings report to <code>docs/SECURITY_REVIEW.md</code></li>
+            <li>Boundary: fixes belong to <code>/code-review</code> + TDD cycle — this skill only audits and reports</li>
+          </ul>
+          <h4>Community context</h4>
+          <p>Security review skills are common in community collections. The <code>hesreallyhim/awesome-claude-code</code> list includes security-scanning workflows; the qaskills.sh collection has a <strong>security-audit</strong> skill covering OWASP, dependency CVEs, and secrets detection. This is a well-understood pattern — it's just missing here.</p>
         </div>
       </div>
     </section>
@@ -673,6 +709,28 @@ description: Helps with documents</pre>
       <h2>Recommended New Skills</h2>
 
       <div class="proposal-card">
+        <div class="prop-title">security-reviewing</div>
+        <div class="prop-cmd">Invocation: /security-reviewing</div>
+        <div class="prop-desc">
+          Systematic security audit tailored to this codebase: run <code>govulncheck</code> for CVEs,
+          <code>gosec</code> for SAST findings, scan for hardcoded secrets, walk OWASP Top 10 against
+          the active code, and produce a ranked findings report to <code>docs/SECURITY_REVIEW.md</code>.
+          Boundaries: audits and reports only — fixes go through the normal <code>/code-review</code> + TDD cycle.
+        </div>
+        <div class="prop-files">
+<span class="fn">skills/security-reviewing/</span>
+├── <span class="fn">SKILL.md</span>
+├── references/
+│   ├── <span class="fn">owasp-top10.md</span>        <span class="cm">← Go-specific OWASP checklist</span>
+│   ├── <span class="fn">secrets-patterns.md</span>   <span class="cm">← regex patterns for credential detection</span>
+│   └── <span class="fn">vuln-triage.md</span>         <span class="cm">← CVE severity guide + fix priority rules</span>
+└── scripts/
+    ├── <span class="fn">govulncheck-run.sh</span>     <span class="cm">← dependency CVE scan</span>
+    ├── <span class="fn">gosec-run.sh</span>           <span class="cm">← SAST security lint</span>
+    └── <span class="fn">secrets-scan.sh</span>        <span class="cm">← grep for hardcoded creds</span></div>
+      </div>
+
+      <div class="proposal-card">
         <div class="prop-title">profiling-performance</div>
         <div class="prop-cmd">Invocation: /profiling-performance</div>
         <div class="prop-desc">
@@ -761,6 +819,7 @@ description: Helps with documents</pre>
         <table class="data-table">
           <thead><tr><th>Item</th><th>Type</th><th>Effort</th><th>Impact</th></tr></thead>
           <tbody>
+            <tr><td><strong>security-reviewing skill</strong></td><td>New skill</td><td>Medium</td><td>High — no CVE scan, SAST, or secrets detection today</td></tr>
             <tr><td><strong>Visual regression in authoring-tests</strong></td><td>Enhancement</td><td>Small</td><td>High — zero-dependency, immediate CI value</td></tr>
             <tr><td><strong>Rapid prototyping in designing-ui-ux</strong></td><td>Enhancement</td><td>Small</td><td>High — faster design iteration</td></tr>
             <tr><td><strong>fuzzing-inputs skill</strong></td><td>New skill</td><td>Medium</td><td>High — Go 1.18+ fuzz is first-class and currently untapped</td></tr>
@@ -797,9 +856,9 @@ description: Helps with documents</pre>
         <thead><tr><th>Phase</th><th>Skills</th><th>Change</th></tr></thead>
         <tbody>
           <tr><td>Today</td><td>13</td><td>—</td></tr>
-          <tr><td>Phase 1 complete</td><td>15</td><td>+2 new skills, 2 enhancements</td></tr>
-          <tr><td>Phase 2 complete</td><td>16</td><td>+1 new skill, 1 enhancement</td></tr>
-          <tr><td>Phase 3 complete</td><td>18</td><td>+2 integrations</td></tr>
+          <tr><td>Phase 1 complete</td><td>16</td><td>+3 new skills, 2 enhancements</td></tr>
+          <tr><td>Phase 2 complete</td><td>17</td><td>+1 new skill, 1 enhancement</td></tr>
+          <tr><td>Phase 3 complete</td><td>19</td><td>+2 integrations</td></tr>
         </tbody>
       </table>
 
