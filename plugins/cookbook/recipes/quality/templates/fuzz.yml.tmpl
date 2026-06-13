@@ -1,0 +1,36 @@
+name: Fuzz smoke
+
+# An OPT-IN quality gate — installed only when the `fuzz_enabled=yes` answer is
+# given (see recipe.yaml). It runs a short fuzz smoke so a seed-corpus regression
+# fails a PR fast; it is NOT a deep campaign. To go deeper, lengthen the fuzztime
+# in {{fuzz_command}} or add a `schedule:` trigger for periodic long runs.
+#
+# Trigger shape mirrors ci.yml: single-run (push only on {{default_branch}}, never a
+# feature branch) and docs-only skip via paths-ignore. scripts/check-workflows.sh
+# guards the no-double-run invariant here too.
+on:
+  push:
+    branches: [{{default_branch}}]
+    paths-ignore: ["docs/**", "**/*.md"]
+  pull_request:
+    branches: [{{default_branch}}]
+    paths-ignore: ["docs/**", "**/*.md"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fuzz-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fuzz:
+    name: Fuzz smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # TODO(backfill): set up the repo's toolchain here (setup-go / setup-node ...).
+      # The adopt-recipes inventory lists what it detected.
+      - name: Short fuzz smoke
+        run: {{fuzz_command}}
