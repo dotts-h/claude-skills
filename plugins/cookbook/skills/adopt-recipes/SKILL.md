@@ -50,9 +50,12 @@ never delete working process docs — you fold them in and flag gaps.
       installed recipe with version, tier, and answers (the installer wrote it).
 - [ ] **8. Wire the doctor.** Add a conformance hook so drift is caught by
       machinery, not memory: a `doctor` target in the Makefile (or npm script)
-      that runs the recipe-doctor aggregate, and mention it in CONVENTIONS'
-      Quality gates. At minimum confirm `scripts/check-workflows.sh` is wired
-      into lint/CI (the quality doctor checks this).
+      that runs the recipe-doctor aggregate — resolving it from
+      `CLAUDE_PLUGIN_ROOT` with an overridable `COOKBOOK` fallback so it runs in
+      CI too, where the plugin isn't loaded (recipe-doctor's *Wiring `make
+      doctor`* note has the drop-in target). Mention it in CONVENTIONS' Quality
+      gates. At minimum confirm `scripts/check-workflows.sh` is wired into
+      lint/CI (the quality doctor checks this).
 - [ ] **9. Run the doctors and report.** Run every installed recipe's
       `${CLAUDE_PLUGIN_ROOT}/recipes/<name>/scripts/doctor.sh <target>` (or the
       recipe-doctor skill's aggregator). Final report: what was installed
