@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>orchestra-skills — Claude Code skills documentation</title>
-<meta name="description" content="Documentation for orchestra-skills: 13 reusable methodology skills for Claude Code covering ADRs, TDD, contracts, conventions, tech-debt, architecture, QA, and design." />
+<title>skills — Claude Code methodology skills (ori marketplace)</title>
+<meta name="description" content="Documentation for skills: 13 reusable methodology skills for Claude Code covering ADRs, TDD, contracts, conventions, tech-debt, architecture, QA, and design." />
 <style>
   :root {
     --bg: #15171a;
@@ -426,7 +426,7 @@
 <body>
 
 <nav class="topnav">
-  <a href="index.html" class="topnav-brand"><span class="glyph">◆</span> orchestra-skills</a>
+  <a href="index.html" class="topnav-brand"><span class="glyph">◆</span> skills</a>
   <div class="topnav-links">
     <a href="index.html" class="active">Plugin Skills</a>
     <a href="claude-code.html">Claude Code</a>
@@ -435,7 +435,7 @@
 </nav>
 
 <header>
-  <h1><span class="glyph">◆</span> orchestra-skills</h1>
+  <h1><span class="glyph">◆</span> skills</h1>
   <p class="tagline">13 reusable methodology skills for Claude Code — distributed as a marketplace plugin, available from your terminal, web app, and mobile.</p>
   <div class="badges">
     <span class="badge">13 skills</span>
@@ -527,7 +527,7 @@
     <section id="overview">
       <h2>Overview</h2>
       <p>
-        <strong>orchestra-skills</strong> is a Claude Code plugin that delivers 13 methodology skills —
+        <strong>skills</strong> is a Claude Code plugin that delivers 13 methodology skills —
         structured workflows covering Architecture Decision Records, TDD, contract registries, tech-debt management,
         codebase mapping, architecture auditing, multi-layer QA, and UI/UX design. Each skill ships with a
         step-by-step workflow, shell helper scripts, and reference guides.
@@ -540,7 +540,7 @@
       <div class="chain">
         <div class="chain-node">marketplace.json<small>dotts-h/claude-skills</small></div>
         <div class="chain-arrow">→</div>
-        <div class="chain-node">orchestra-skills<small>plugin · v0.1.0</small></div>
+        <div class="chain-node">skills<small>plugin · v0.1.0</small></div>
         <div class="chain-arrow">→</div>
         <div class="chain-node">13 skills<small>SKILL.md + scripts + refs</small></div>
         <div class="chain-arrow">→</div>
@@ -556,7 +556,7 @@
 <pre><span class="dim">dotts-h/claude-skills/</span>
 ├── <span class="hl">.claude-plugin/</span>
 │   └── marketplace.json    <span class="dim"># catalog — registers the plugin</span>
-├── <span class="hl">plugins/orchestra-skills/</span>
+├── <span class="hl">plugins/skills/</span>
 │   ├── .claude-plugin/
 │   │   └── plugin.json     <span class="dim"># manifest (name, version, author)</span>
 │   └── skills/
@@ -602,7 +602,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
       <h3>Marketplace distribution</h3>
       <p>
         The <code>.claude-plugin/marketplace.json</code> file registers the repo as a named marketplace
-        (<code>orchestra</code>). The <code>plugin.json</code> manifest inside the plugin declares
+        (<code>ori</code>). The <code>plugin.json</code> manifest inside the plugin declares
         what skills it provides. Cloud sessions read a repo's committed <code>.claude/settings.json</code>
         and install declared plugins automatically at session start — no local setup needed for web or mobile.
       </p>
@@ -1209,7 +1209,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 </div>
 
 <footer>
-  orchestra-skills v0.1.0 ·
+  skills v0.1.0 ·
   <a href="https://github.com/dotts-h/claude-skills">github.com/dotts-h/claude-skills</a> ·
   built for <a href="https://github.com/dotts-h/Copilot-sdk">my-orchestra</a>
 </footer>

@@ -1,6 +1,6 @@
 # Claude Code Skills: Comprehensive Research Report
 
-> **Scope:** Built-in commands & bundled skills, the orchestra-skills plugin (this repo),
+> **Scope:** Built-in commands & bundled skills, the skills plugin (this repo),
 > testing-skill gap analysis, UI/UX prototyping, community ecosystem, architecture best
 > practices, and a concrete improvement roadmap.
 >
@@ -15,7 +15,7 @@
 2. [All Built-in Claude Code Commands](#2-all-built-in-claude-code-commands)
 3. [Bundled Skills & Workflows](#3-bundled-skills--workflows)
 4. [Pre-built Agent Skills](#4-pre-built-agent-skills)
-5. [This Repository: Orchestra-Skills](#5-this-repository-orchestra-skills)
+5. [This Repository: Skills](#5-this-repository-skills)
 6. [Testing Skills: Current State & Gaps](#6-testing-skills-current-state--gaps)
 7. [UI/UX Prototyping Skills](#7-uiux-prototyping-skills)
 8. [Community Ecosystem](#8-community-ecosystem)
@@ -80,7 +80,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob   # optional
 ~/.claude/plugins/        ← installed plugins (bundled skill sets)
 ```
 
-Skills installed via plugins (like orchestra-skills) drop into
+Skills installed via plugins (like skills) drop into
 `~/.claude/plugins/<plugin-name>/skills/` and are available in every session.
 
 ### 1.5 Invocation Modes
@@ -315,10 +315,10 @@ Skills do **not** sync across surfaces automatically:
 
 ---
 
-## 5. This Repository: Orchestra-Skills
+## 5. This Repository: Skills
 
 **Repository:** `dotts-h/claude-skills`  
-**Plugin:** `orchestra-skills` v0.1.0  
+**Plugin:** `skills` v0.1.0  
 **Skills:** 13, organized into 4 groups  
 **Install:** Add to `.claude/settings.json` → cloud sessions install automatically
 
@@ -654,7 +654,7 @@ production routing is touched.
 
 ### 7.5 Gap Analysis for This Repo
 
-The `designing-ui-ux` skill in orchestra-skills is **production-first**, which is correct
+The `designing-ui-ux` skill in skills is **production-first**, which is correct
 for its scope. What's missing is a **prototyping-first companion** for exploring new
 UI ideas quickly.
 
@@ -881,7 +881,7 @@ For validation-heavy skills, use the **plan-validate-execute pattern**:
 
 ### 9.8 Composition Patterns
 
-Skills are designed to **compose**. The orchestra-skills plugin demonstrates this well:
+Skills are designed to **compose**. The skills plugin demonstrates this well:
 each skill has explicit **boundary rules** that define what it does *and what it defers to
 other skills*:
 
@@ -900,7 +900,7 @@ Document your skill's boundaries explicitly in its SKILL.md.
 
 ## 10. Recommended New Skills for This Repo
 
-Based on the gap analysis above, here are concrete skill proposals for orchestra-skills.
+Based on the gap analysis above, here are concrete skill proposals for skills.
 
 ### 10.1 `profiling-performance` (High Priority)
 
@@ -1081,4 +1081,4 @@ existing skill.
 *Report compiled from: official Anthropic documentation, Claude Code commands reference,
 platform.claude.com best practices, community GitHub repositories, qaskills.sh blog,
 dev.to QA skills article, atfzl.com Storybook prototyping guide, and direct analysis of
-the orchestra-skills plugin source code.*
+the skills plugin source code.*
