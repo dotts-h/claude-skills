@@ -20,13 +20,22 @@ Add to the repo's committed `.claude/settings.json`:
   "extraKnownMarketplaces": {
     "ori": { "source": { "source": "github", "repo": "dotts-h/claude-skills" } }
   },
-  "enabledPlugins": ["skills@ori", "cookbook@ori"]
+  "enabledPlugins": {
+    "skills@ori": true,
+    "cookbook@ori": true
+  }
 }
 ```
 
+> `enabledPlugins` is an **object** keyed by `plugin-id@marketplace-id` with boolean
+> values — the array form (`["skills@ori", ...]`) is silently ignored by the settings
+> schema, so the plugins never enable.
+
 Commit + push. Any cloud session for that repo installs the plugins automatically at
-session start (GitHub is in the default network allowlist). Locally you can also add
-them interactively:
+session start (GitHub is in the default network allowlist), **provided this
+marketplace repo is public** — the cloud container clones the marketplace source
+directly from github.com without credentials. Locally you can also add them
+interactively:
 
 ```
 /plugin marketplace add dotts-h/claude-skills
