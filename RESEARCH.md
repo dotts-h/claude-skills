@@ -325,9 +325,9 @@ Skills do **not** sync across surfaces automatically:
 ```json
 {
   "extraKnownMarketplaces": {
-    "orchestra": { "source": { "source": "github", "repo": "dotts-h/claude-skills" } }
+    "ori": { "source": { "source": "github", "repo": "dotts-h/claude-skills" } }
   },
-  "enabledPlugins": ["orchestra-skills@orchestra"]
+  "enabledPlugins": ["skills@ori"]
 }
 ```
 

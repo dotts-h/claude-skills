@@ -622,11 +622,11 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
         <p>Add to the repo's committed <code>.claude/settings.json</code>:</p>
 <pre>{
   "extraKnownMarketplaces": {
-    "orchestra": {
+    "ori": {
       "source": { "source": "github", "repo": "dotts-h/claude-skills" }
     }
   },
-  "enabledPlugins": ["orchestra-skills@orchestra"]
+  "enabledPlugins": ["skills@ori"]
 }</pre>
         <p>Commit and push. Any cloud session for that repo installs the plugin automatically at session start.</p>
       </div>
@@ -634,7 +634,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
       <div class="install-option">
         <h3>Interactively in a local session</h3>
 <pre>/plugin marketplace add dotts-h/claude-skills
-/plugin install orchestra-skills@orchestra</pre>
+/plugin install skills@ori</pre>
       </div>
 
       <div class="install-option">
