@@ -6,7 +6,8 @@ name: CI
 # push event AND the pull_request event, on refs the concurrency group can't dedup).
 # scripts/check-workflows.sh guards this invariant.
 #
-# `paths-ignore` skips the whole pipeline for docs-only changes — a markdown edit
+# `paths-ignore` skips the whole pipeline for docs-only and agent-config (`.claude/**`)
+# changes — a markdown edit or a Claude settings/skill edit
 # can't change a build or test result. The skip fires only when EVERY changed path
 # matches, so a PR that also touches code still runs in full. Two cautions before
 # trusting it: (1) if any committed `.md`/`docs/**` file is a build or test input
@@ -17,10 +18,10 @@ name: CI
 on:
   push:
     branches: [{{default_branch}}]
-    paths-ignore: ["docs/**", "**/*.md"]
+    paths-ignore: ["docs/**", "**/*.md", ".claude/**"]
   pull_request:
     branches: [{{default_branch}}]
-    paths-ignore: ["docs/**", "**/*.md"]
+    paths-ignore: ["docs/**", "**/*.md", ".claude/**"]
   workflow_dispatch:
 
 permissions:

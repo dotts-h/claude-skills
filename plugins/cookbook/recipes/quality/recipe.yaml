@@ -1,5 +1,5 @@
 name: quality
-version: 0.2.0
+version: 0.3.0
 description: Layer 1 — quality gates. Single-run CI wiring (Make- and npm-flavored) that also skips docs-only changes via paths-ignore, the self-enforcing workflow guard (no feature-branch double-runs, no release version-resolution bug), a parametrized coverage floor, an opt-in fuzz-smoke workflow, and the REGRESSIONS register (every fixed bug gets a guard test).
 requires:
   recipes: [core]
